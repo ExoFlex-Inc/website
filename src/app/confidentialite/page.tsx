@@ -36,7 +36,10 @@ export default function PolitiqueConfidentialite() {
           renseignements personnels dans le secteur privé, telle que modifiée par
           la Loi 25.
         </p>
-        <p>Adresse du siège : [À VÉRIFIER — adresse civique complète d&apos;ExoFlex inc.]</p>
+        <p>
+          Adresse du siège : 1672, rue de l&apos;Islet, Québec (Québec) Canada
+          G2K 2G6
+        </p>
       </section>
 
       <section>
@@ -81,9 +84,12 @@ export default function PolitiqueConfidentialite() {
           au fonctionnement et au soutien de l&apos;appareil.
         </p>
         <p>
-          <strong>Renseignements liés au site Web.</strong> [À VÉRIFIER — préciser
-          si le site utilise des témoins ou un outil de statistiques, et lesquels.
-          Si aucun n&apos;est utilisé, l&apos;indiquer explicitement.]
+          <strong>Renseignements liés au site Web.</strong> Ce site
+          n&apos;utilise aucun outil de statistiques, aucun traceur publicitaire
+          ni témoin non essentiel. Si vous remplissez le formulaire de contact, le
+          prénom, le nom, l&apos;adresse de courriel et le message que vous
+          fournissez sont transmis à HubSpot, notre fournisseur de gestion de la
+          relation client, afin que nous puissions vous répondre.
         </p>
         <p>
           Nous ne recueillons pas sciemment de renseignements au-delà de ce qui est
@@ -180,11 +186,18 @@ export default function PolitiqueConfidentialite() {
         </p>
         <ul>
           <li>
-            <strong>Fournisseurs de services.</strong> Fournisseurs
-            d&apos;hébergement, de stockage et d&apos;infrastructure agissant selon
-            nos instructions et liés par des obligations de confidentialité et de
-            sécurité. [À VÉRIFIER — nommer les fournisseurs utilisés et les pays où
-            les renseignements sont conservés.]
+            <strong>HubSpot.</strong> Les envois du formulaire de contact sont
+            traités par HubSpot, Inc., qui fournit notre service de gestion de la
+            relation client.
+          </li>
+          <li>
+            <strong>Fournisseurs d&apos;hébergement et d&apos;infrastructure.</strong>{" "}
+            Lorsqu&apos;un service hébergé est utilisé, les fournisseurs agissent
+            selon nos instructions et sont liés par des obligations de
+            confidentialité et de sécurité. ExoFlex n&apos;a pas encore arrêté son
+            choix d&apos;hébergement pour le déploiement commercial. La présente
+            politique sera mise à jour pour nommer le fournisseur et les pays de
+            conservation avant la distribution commerciale de l&apos;appareil.
           </li>
           <li>
             <strong>Établissement traitant.</strong> Les données de séance sont
@@ -213,11 +226,16 @@ export default function PolitiqueConfidentialite() {
       <section>
         <h2>8. Lieu de conservation et communication hors Québec</h2>
         <p>
-          [À VÉRIFIER — préciser où les renseignements sont hébergés (par exemple
-          au Canada, aux États-Unis, ou les deux) et, si des renseignements sont
-          communiqués à l&apos;extérieur du Québec, confirmer qu&apos;une
-          évaluation des facteurs relatifs à la vie privée a été réalisée, comme
-          l&apos;exige la Loi 25.]
+          Les envois du formulaire de contact sont traités par HubSpot, Inc. sur
+          une infrastructure située aux États-Unis.
+        </p>
+        <p>
+          Le mode d&apos;hébergement des données de séance et des renseignements de
+          patients n&apos;est pas encore arrêté. Avant que de tels renseignements
+          soient communiqués à l&apos;extérieur du Québec, nous réaliserons une
+          évaluation des facteurs relatifs à la vie privée comme l&apos;exige la Loi
+          25, et nous mettrons la présente politique à jour pour nommer le
+          fournisseur et les pays concernés.
         </p>
       </section>
 
@@ -227,10 +245,14 @@ export default function PolitiqueConfidentialite() {
           Nous ne conservons les renseignements personnels que le temps nécessaire
           aux fins décrites dans la présente politique, et pendant les périodes
           exigées par la réglementation applicable aux dossiers médicaux et aux
-          instruments médicaux. [À VÉRIFIER — indiquer les durées de conservation
-          réelles des données de séance, des renseignements d&apos;identification
-          du patient et des renseignements de compte.] Lorsque les renseignements
-          ne sont plus nécessaires, nous les détruisons ou les anonymisons.
+          instruments médicaux. Les durées de conservation des données de séance et
+          des renseignements d&apos;identification du patient sont établies par
+          entente avec l&apos;établissement traitant, qui détient le dossier
+          clinique. Les renseignements de compte sont conservés pendant la durée du
+          compte et supprimés sur demande. Les envois du formulaire de contact sont
+          conservés le temps nécessaire pour répondre et faire le suivi, et
+          supprimés sur demande. Lorsque les renseignements ne sont plus
+          nécessaires, nous les détruisons ou les anonymisons.
         </p>
       </section>
 
@@ -239,11 +261,10 @@ export default function PolitiqueConfidentialite() {
         <p>
           Nous appliquons des mesures techniques et organisationnelles
           proportionnées à la sensibilité des renseignements, dont le chiffrement
-          des données en transit, des contrôles d&apos;accès limitant
+          des données en transit, le chiffrement au repos assuré par défaut par nos
+          fournisseurs d&apos;infrastructure, des contrôles d&apos;accès limitant
           l&apos;accès au personnel autorisé selon le principe du besoin de savoir,
-          et la journalisation des accès aux renseignements de santé. [À VÉRIFIER —
-          confirmer si les données sont chiffrées au repos et décrire le processus
-          de sauvegarde et de réponse aux incidents.]
+          et la journalisation des accès aux renseignements de santé.
         </p>
         <p>
           Aucun système n&apos;est parfaitement sûr. Si un incident de

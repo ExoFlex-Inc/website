@@ -119,10 +119,12 @@ export default function Terms() {
           unusual discomfort or any unexpected reaction.
         </p>
         <p>
-          [TO VERIFY — state the regulatory status of the device in each market
-          where it is distributed, for example the Health Canada medical device
-          licence and the applicable FDA classification or clearance in the United
-          States. Do not publish claims that have not been confirmed.]
+          <strong>Regulatory status.</strong> ExoFlex devices are at the prototype
+          stage. They are not licensed as medical devices by Health Canada, and
+          they are not cleared or approved by the United States Food and Drug
+          Administration. They are made available only for evaluation,
+          demonstration and research purposes, under the supervision of qualified
+          personnel. This section will be updated when that status changes.
         </p>
       </section>
 
@@ -166,8 +168,12 @@ export default function Terms() {
         <p>
           The software may include third-party or open-source components licensed
           under their own terms, which prevail over these terms in respect of those
-          components. [TO VERIFY — publish or link the third-party licence notices
-          distributed with the software.]
+          components. The applicable third-party and open-source licence notices are
+          available on request from{" "}
+          <a href="mailto:olivier.jackson@exoflex.ca">
+            olivier.jackson@exoflex.ca
+          </a>
+          .
         </p>
       </section>
 
@@ -226,10 +232,9 @@ export default function Terms() {
         <h2>13. Governing law</h2>
         <p>
           These terms are governed by the laws applicable in the Province of
-          Quebec, Canada. The courts of the judicial district of [TO VERIFY —
-          judicial district of ExoFlex&apos;s head office] have exclusive
-          jurisdiction, subject to any mandatory rule granting you the right to sue
-          in your place of residence.
+          Quebec, Canada. The courts of the judicial district of Québec have
+          exclusive jurisdiction, subject to any mandatory rule granting you the
+          right to sue in your place of residence.
         </p>
       </section>
 

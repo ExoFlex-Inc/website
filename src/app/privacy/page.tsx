@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
           Law 25).
         </p>
         <p>
-          Registered address: [TO VERIFY — full civic address of ExoFlex Inc.]
+          Registered address: 1672 rue de l&apos;Islet, Québec, Canada G2K 2G6
         </p>
       </section>
 
@@ -78,9 +78,11 @@ export default function PrivacyPolicy() {
           metadata needed to operate and support the device.
         </p>
         <p>
-          <strong>Website information.</strong> [TO VERIFY — state whether the
-          website uses analytics or cookies, and which ones. If none are used,
-          this section should say so explicitly.]
+          <strong>Website information.</strong> This website does not use
+          analytics tools, advertising trackers or non-essential cookies. If you
+          submit the contact form, the first name, last name, email address and
+          message you provide are transmitted to HubSpot, our customer
+          relationship management provider, so that we can respond to you.
         </p>
         <p>
           We do not knowingly collect information beyond what is described above.
@@ -171,11 +173,17 @@ export default function PrivacyPolicy() {
         </p>
         <ul>
           <li>
-            <strong>Service providers.</strong> Hosting, storage and
-            infrastructure providers acting on our instructions and bound by
-            confidentiality and security obligations. [TO VERIFY — name the
-            hosting and infrastructure providers used and the countries where
-            data is stored.]
+            <strong>HubSpot.</strong> Contact form submissions are processed by
+            HubSpot, Inc., which provides our customer relationship management
+            service.
+          </li>
+          <li>
+            <strong>Hosting and infrastructure providers.</strong> Where a hosted
+            service is used, providers act on our instructions and are bound by
+            confidentiality and security obligations. ExoFlex has not yet
+            finalized its hosting arrangement for commercial deployment. This
+            policy will be updated to name the provider and the countries of
+            storage before the device is distributed commercially.
           </li>
           <li>
             <strong>The treating organization.</strong> Session data is made
@@ -200,10 +208,15 @@ export default function PrivacyPolicy() {
       <section>
         <h2>8. Storage location and cross-border transfers</h2>
         <p>
-          [TO VERIFY — state where data is hosted (for example, Canada, the United
-          States, or both) and, if information is transferred outside Quebec,
-          confirm that a privacy impact assessment has been conducted as required
-          by Law 25.]
+          Contact form submissions are processed by HubSpot, Inc. on
+          infrastructure located in the United States.
+        </p>
+        <p>
+          The hosting arrangement for session data and patient information has not
+          yet been finalized. Before any such information is transferred outside
+          Quebec, we will conduct a privacy impact assessment as required by Law 25
+          and update this policy to identify the provider and the countries
+          concerned.
         </p>
       </section>
 
@@ -212,10 +225,13 @@ export default function PrivacyPolicy() {
         <p>
           We keep personal information only as long as necessary for the purposes
           described in this policy, and for the periods required by applicable
-          medical records and medical device regulations. [TO VERIFY — state the
-          actual retention periods for session data, patient identification
-          information and account information.] When information is no longer
-          required, we destroy it or anonymize it.
+          medical records and medical device regulations. Retention periods for
+          session data and patient identification information are established by
+          agreement with the treating organization, which controls the clinical
+          record. Account information is kept for the duration of the account and
+          deleted on request. Contact form submissions are kept as long as needed
+          to respond and follow up, and are deleted on request. When information is
+          no longer required, we destroy it or anonymize it.
         </p>
       </section>
 
@@ -224,10 +240,9 @@ export default function PrivacyPolicy() {
         <p>
           We apply technical and organizational safeguards proportionate to the
           sensitivity of the information, including encryption of data in transit,
-          access controls limiting access to authorized personnel on a need-to-know
-          basis, and logging of access to health information. [TO VERIFY — confirm
-          whether data is encrypted at rest and describe the backup and incident
-          response process.]
+          the encryption at rest provided by default by our infrastructure
+          providers, access controls limiting access to authorized personnel on a
+          need-to-know basis, and logging of access to health information.
         </p>
         <p>
           No system is perfectly secure. If a confidentiality incident presents a

@@ -129,11 +129,13 @@ export default function Conditions() {
           réaction imprévue.
         </p>
         <p>
-          [À VÉRIFIER — indiquer le statut réglementaire de l&apos;appareil dans
-          chaque marché où il est distribué, par exemple l&apos;homologation
-          d&apos;instrument médical de Santé Canada et la classification ou
-          l&apos;autorisation applicable de la FDA aux États-Unis. Ne publier aucune
-          affirmation qui n&apos;a pas été confirmée.]
+          <strong>Statut réglementaire.</strong> Les appareils ExoFlex sont au stade
+          du prototype. Ils ne sont pas homologués comme instruments médicaux par
+          Santé Canada et ne sont ni autorisés ni approuvés par la Food and Drug
+          Administration des États-Unis. Ils sont mis à disposition uniquement à des
+          fins d&apos;évaluation, de démonstration et de recherche, sous la
+          supervision de personnel qualifié. La présente section sera mise à jour
+          lorsque ce statut changera.
         </p>
       </section>
 
@@ -180,9 +182,13 @@ export default function Conditions() {
         <p>
           Le logiciel peut comprendre des composants de tiers ou à code source
           ouvert visés par leurs propres licences, lesquelles ont préséance sur les
-          présentes conditions à l&apos;égard de ces composants. [À VÉRIFIER —
-          publier ou lier les avis de licence des tiers distribués avec le
-          logiciel.]
+          présentes conditions à l&apos;égard de ces composants. Les avis de licence
+          applicables des tiers et des composants à code source ouvert sont
+          disponibles sur demande à{" "}
+          <a href="mailto:olivier.jackson@exoflex.ca">
+            olivier.jackson@exoflex.ca
+          </a>
+          .
         </p>
       </section>
 
@@ -246,10 +252,10 @@ export default function Conditions() {
         <h2>13. Droit applicable</h2>
         <p>
           Les présentes conditions sont régies par les lois applicables dans la
-          province de Québec, au Canada. Les tribunaux du district judiciaire de [À
-          VÉRIFIER — district judiciaire du siège d&apos;ExoFlex] ont compétence
-          exclusive, sous réserve de toute règle impérative vous accordant le droit
-          d&apos;intenter un recours dans votre lieu de résidence.
+          province de Québec, au Canada. Les tribunaux du district judiciaire de
+          Québec ont compétence exclusive, sous réserve de toute règle impérative
+          vous accordant le droit d&apos;intenter un recours dans votre lieu de
+          résidence.
         </p>
       </section>
 
