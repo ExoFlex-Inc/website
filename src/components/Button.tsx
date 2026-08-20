@@ -1,24 +1,67 @@
-import { LinkField } from "@prismicio/client";
-import { PrismicNextLink } from "@prismicio/next";
-import clsx from "clsx";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  buttonLink: LinkField;
-  buttonText: string | null;
+  href: string;
+  children: React.ReactNode;
+  /** `solid` is the one primary action; `quiet` is a rule-underlined text link. */
+  variant?: "solid" | "quiet";
   className?: string;
 };
 
-export default function Button({ buttonLink, buttonText, className }: Props) {
+/**
+ * The primary action is ink on paper, not brand blue on paper.
+ *
+ * The ExoFlex blue only reaches 4.05:1 behind white text, which fails AA at
+ * body size. Ink reaches 15:1, and reserving the blue for focus rings, active
+ * states and small accents is also what keeps it reading as an accent by the
+ * time you get to the bottom of the page.
+ */
+export default function Button({
+  href,
+  children,
+  variant = "solid",
+  className,
+}: Props) {
+  if (variant === "quiet") {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          "group inline-flex items-center gap-2 text-sm font-medium text-slate",
+          "border-b border-hair-strong pb-1 transition-colors duration-200",
+          "hover:border-accent-ink hover:text-ink",
+          className
+        )}
+      >
+        {children}
+        <span
+          aria-hidden="true"
+          className="transition-transform duration-300 group-hover:translate-x-1"
+        >
+          →
+        </span>
+      </Link>
+    );
+  }
+
   return (
-    <PrismicNextLink
-      field={buttonLink}
-      className={clsx(
-        "rounded-xl border border-white text-center font-bold uppercase tracking-wide text-white transition-colors duration-150 hover:bg-blue-600",
-        "px-4 py-3 text-base sm:px-5 sm:py-4 sm:text-lg md:text-xl lg:text-2xl",
+    <Link
+      href={href}
+      className={cn(
+        "group inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3.5",
+        "text-sm font-medium text-on-ink transition-colors duration-200",
+        "hover:bg-accent-ink",
         className
       )}
     >
-      {buttonText}
-    </PrismicNextLink>
+      {children}
+      <span
+        aria-hidden="true"
+        className="transition-transform duration-300 group-hover:translate-x-1"
+      >
+        →
+      </span>
+    </Link>
   );
 }

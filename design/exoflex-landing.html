@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExoFlex — Portable upper-limb assistive device for post-stroke rehabilitation</title>
+<meta name="description" content="ExoFlex is an investigational wearable upper-limb device that detects a patient's intended movement using surface EMG, inertial and force sensing, and supplies only the assistance that movement is missing.">
+
+<!--
+  ============================================================================
+  ExoFlex — landing page concept
+  ----------------------------------------------------------------------------
+  PHOTOGRAPHY
+  Every <img> points at a real intended path under images/. None of those files
+  exist yet, so each one fails and is replaced by a generated duotone
+  placeholder (see makePlaceholder()). Drop the shoot into these paths and the
+  page picks them up with no code change:
+
+    images/hero/device-therapy-table.jpg      2000x1250   16:10
+    images/gallery/forearm-cuff.jpg           1200x1600    3:4
+    images/gallery/emg-array.jpg              1400x1400    1:1
+    images/gallery/actuator-housing.jpg       1600x1200    4:3
+    images/gallery/cable-routing.jpg          1200x1600    3:4
+    images/gallery/hand-mid-grasp.jpg         1600x1200    4:3
+    images/gallery/device-daylight.jpg        2000x1125   16:9
+    images/mechanism/01-intent.jpg            1600x1200    4:3
+    images/mechanism/02-assist.jpg            1600x1200    4:3
+    images/mechanism/03-portability.jpg       1600x1200    4:3
+    images/mechanism/04-data.jpg              1600x1200    4:3
+    images/team/felix-roy.jpg                 1000x1250    4:5
+    images/team/olivier-jackson.jpg           1000x1250    4:5
+    images/team/simon-chayer.jpg              1000x1250    4:5
+
+  UNVERIFIED COPY — replace before publishing
+  - Clinician quotes in §7 are bracketed placeholders on purpose. Do not ship
+    invented attributed quotes for a medical device. Replace with real,
+    consent-given quotes.
+  - Founder names/roles were taken from the current exoflex.ca site. Confirm.
+  - The inquiry form has no endpoint. Wire action= before publishing.
+
+  BILINGUAL READINESS
+  All text containers are sized in ch/rem with intrinsic minimums; no fixed
+  pixel heights, no nowrap on labels, no tracking-dependent alignment. French
+  copy running ~25% longer reflows rather than clipping. A FR string table
+  drops in at the same DOM positions.
+  ============================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─────────────────────────────  tokens  ───────────────────────────── */
+:root{
+  --paper:#F4F2ED;
+  --paper-deep:#E7E3DB;
+  --graphite:#1B1E21;
+  --slate:#565C63;
+  --accent:#0A5C73;
+  --accent-lift:#58AEC4;
+
+  --hairline:#D6D1C8;
+  --hairline:color-mix(in srgb, var(--graphite) 16%, var(--paper));
+  --hairline-dark:color-mix(in srgb, var(--paper) 22%, var(--graphite));
+
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+
+  /* fluid scale, ratio ≈1.28 at the top end */
+  --t-cap:clamp(0.69rem,0.665rem + 0.11vw,0.78rem);
+  --t-small:clamp(0.83rem,0.8rem + 0.14vw,0.92rem);
+  --t-body:clamp(1rem,0.955rem + 0.22vw,1.14rem);
+  --t-lead:clamp(1.2rem,1.06rem + 0.68vw,1.62rem);
+  --t-h3:clamp(1.35rem,1.16rem + 0.86vw,1.95rem);
+  --t-h2:clamp(1.9rem,1.4rem + 2.1vw,3.3rem);
+  --t-h1:clamp(2.1rem,1.34rem + 3.1vw,4.4rem);
+  --t-num:clamp(2.8rem,1.9rem + 4.4vw,6.2rem);
+
+  --gutter:clamp(1.25rem,4vw,5rem);
+  --maxw:1440px;
+  --rail:clamp(0rem,10vw,13rem);
+  --sec-y:clamp(5rem,11vh,10rem);
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* ─────────────────────────────  base  ───────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--graphite);
+  font-family:var(--f-body);
+  font-size:var(--t-body);
+  line-height:1.6;
+  font-synthesis-weight:none;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto;display:block}
+h1,h2,h3,h4{margin:0;font-weight:400;font-family:var(--f-display);line-height:1.08;letter-spacing:-0.012em}
+h1{font-size:var(--t-h1)}
+h2{font-size:var(--t-h2)}
+h3{font-size:var(--t-h3);line-height:1.16}
+p{margin:0}
+a{color:inherit}
+
+.wrap{width:min(100% - (var(--gutter) * 2),var(--maxw));margin-inline:auto}
+.rule{border:0;border-top:1px solid var(--hairline);margin:0}
+
+/* mono utility label — the instrument-label layer */
+.mono{
+  font-family:var(--f-mono);
+  font-size:var(--t-cap);
+  font-weight:500;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--slate);
+  line-height:1.5;
+}
+.mono--plain{text-transform:none;letter-spacing:0.02em;font-weight:400}
+
+.lead{font-size:var(--t-lead);line-height:1.42;font-family:var(--f-display);color:var(--graphite);max-width:34ch}
+.body-col{max-width:64ch;color:var(--slate)}
+.body-col + .body-col{margin-top:1.1em}
+
+/* section shell: mono rail + content */
+.sec{padding-block:var(--sec-y)}
+.sec__grid{display:grid;gap:clamp(1.5rem,4vw,3.5rem);grid-template-columns:1fr}
+@media(min-width:900px){
+  .sec__grid{grid-template-columns:var(--rail) minmax(0,1fr)}
+}
+.sec__rail{align-self:start}
+@media(min-width:900px){.sec__rail{position:sticky;top:calc(50vh - 3rem)}}
+
+/* ─── accessibility ─── */
+.skip{
+  position:absolute;left:0.5rem;top:-4rem;z-index:200;
+  background:var(--graphite);color:var(--paper);
+  padding:0.6rem 1rem;border-radius:2px;
+  transition:top .2s var(--ease);
+}
+.skip:focus{top:0.5rem}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:1px}
+.on-dark :focus-visible{outline-color:var(--accent-lift)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ─────────────────────────────  nav  ───────────────────────────── */
+.nav{
+  position:sticky;top:0;z-index:80;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease);
+}
+.nav.is-stuck{border-bottom-color:var(--hairline)}
+.nav__in{
+  display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);
+  padding-block:1rem;flex-wrap:wrap;
+}
+.wordmark{
+  font-family:var(--f-display);font-size:1.28rem;letter-spacing:-0.02em;
+  text-decoration:none;margin-right:auto;
+}
+.wordmark span{color:var(--accent)}
+.nav__links{display:none;gap:clamp(1rem,2.4vw,2rem);align-items:center}
+@media(min-width:820px){.nav__links{display:flex}}
+.nav__links a{
+  font-family:var(--f-mono);font-size:var(--t-cap);font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);
+  text-decoration:none;padding-block:0.35rem;position:relative;
+}
+.nav__links a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .34s var(--ease);
+}
+.nav__links a:hover{color:var(--graphite)}
+.nav__links a:hover::after{transform:scaleX(1)}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  font-family:var(--f-mono);font-size:var(--t-cap);font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:0.85rem 1.35rem;border:1px solid var(--accent);
+  background:var(--accent);color:#fff;text-decoration:none;
+  border-radius:2px;cursor:pointer;
+  transition:background .3s var(--ease),color .3s var(--ease);
+}
+.btn:hover{background:transparent;color:var(--accent)}
+.btn__arrow{transition:transform .34s var(--ease)}
+.btn:hover .btn__arrow{transform:translateX(3px)}
+.btn--ghost{background:transparent;color:var(--accent)}
+.btn--ghost:hover{background:var(--accent);color:#fff}
+
+/* ─────────────────────────────  hero  ───────────────────────────── */
+.hero{padding-top:clamp(2.5rem,7vh,5rem);padding-bottom:var(--sec-y)}
+.hero__eyebrow{margin-bottom:clamp(1.6rem,4vh,2.6rem)}
+.hero__h1{max-width:30ch;text-wrap:pretty}
+.hero__sub{margin-top:clamp(1.4rem,3vh,2.2rem);max-width:56ch;color:var(--slate)}
+.hero__cta{margin-top:clamp(1.8rem,4vh,2.8rem);display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.hero__cue{
+  font-family:var(--f-mono);font-size:var(--t-cap);letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--slate);text-decoration:none;
+  border-bottom:1px solid var(--hairline);padding-bottom:2px;
+}
+.hero__cue:hover{color:var(--graphite);border-bottom-color:var(--accent)}
+
+.hero__figure{margin:clamp(2.5rem,7vh,5rem) 0 0}
+.figure{margin:0;position:relative}
+.figure__frame{
+  position:relative;overflow:hidden;background:var(--paper-deep);
+}
+.figure__frame img{width:100%;height:100%;object-fit:cover;display:block}
+.figure__cap{
+  display:flex;gap:0.75rem;align-items:baseline;
+  margin-top:0.7rem;padding-top:0.7rem;border-top:1px solid var(--hairline);
+  flex-wrap:wrap;
+}
+.figure__cap .idx{color:var(--accent);flex:none}
+.figure__cap .txt{color:var(--slate)}
+.is-ph .figure__frame::after{
+  content:"RENDER PENDING";
+  position:absolute;right:0.7rem;bottom:0.6rem;
+  font-family:var(--f-mono);font-size:0.6rem;font-weight:500;letter-spacing:0.14em;
+  color:color-mix(in srgb,var(--paper) 70%,transparent);
+  mix-blend-mode:difference;pointer-events:none;
+}
+
+/* ─────────────────────────────  problem  ───────────────────────────── */
+.problem{background:var(--paper-deep)}
+.problem__body{
+  font-family:var(--f-display);
+  font-size:clamp(1.35rem,0.95rem + 1.8vw,2.5rem);
+  line-height:1.3;max-width:44ch;letter-spacing:-0.01em;
+}
+.problem__body .w{display:inline-block;white-space:pre}
+.problem__note{margin-top:clamp(2rem,5vh,3.5rem);max-width:52ch}
+
+/* ─────────────────────────────  gallery  ───────────────────────────── */
+.gal{display:grid;gap:clamp(1.5rem,4vw,3rem);grid-template-columns:1fr}
+@media(min-width:700px){.gal{grid-template-columns:repeat(6,1fr)}}
+.gal .figure{grid-column:1/-1}
+/* placements need the same specificity as the base rule above, or they lose */
+@media(min-width:700px){
+  .gal .g1{grid-column:1/4}
+  .gal .g2{grid-column:4/7;align-self:end}
+  .gal .g3{grid-column:2/7}
+  .gal .g4{grid-column:1/3}
+  .gal .g5{grid-column:3/7}
+  .gal .g6{grid-column:1/-1}
+}
+.ar-34 .figure__frame{aspect-ratio:3/4}
+.ar-11 .figure__frame{aspect-ratio:1/1}
+.ar-43 .figure__frame{aspect-ratio:4/3}
+.ar-169 .figure__frame{aspect-ratio:16/9}
+.ar-1610 .figure__frame{aspect-ratio:16/10}
+.ar-45 .figure__frame{aspect-ratio:4/5}
+@media(max-width:520px){
+  .ar-34 .figure__frame,.ar-11 .figure__frame{aspect-ratio:4/3}
+}
+
+/* ─────────────────────────────  mechanism (pinned)  ───────────────────────────── */
+.mech{background:var(--paper)}
+.mech__stage{display:grid;gap:clamp(1.5rem,4vw,3.5rem);grid-template-columns:1fr}
+@media(min-width:900px){
+  .mech__stage{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center}
+}
+.mech__ticks{display:flex;gap:1.1rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.mech__tick{
+  font-family:var(--f-mono);font-size:var(--t-cap);font-weight:500;letter-spacing:0.1em;
+  color:color-mix(in srgb,var(--slate) 55%,transparent);
+  padding-bottom:0.35rem;border-bottom:1px solid transparent;
+  transition:color .4s var(--ease),border-color .4s var(--ease);
+  background:none;border-left:0;border-right:0;border-top:0;cursor:pointer;
+}
+.mech__tick.is-on{color:var(--accent);border-bottom-color:var(--accent)}
+.mech__panels{position:relative}
+.mech__panel + .mech__panel{margin-top:clamp(2.5rem,6vh,4rem)}
+.mech__panel h3{margin-bottom:0.9rem;max-width:26ch}
+.mech__panel .num{display:block;margin-bottom:1rem}
+.mech__art{margin-top:1.75rem}
+@media(min-width:900px){
+  /* pinned mode: panels stack in place, JS crossfades */
+  .is-pinned .mech__panels{min-height:22rem}
+  .is-pinned .mech__panel{position:absolute;inset:0;margin-top:0!important}
+  .is-pinned .mech__art{display:none}
+  .is-pinned .mech__figs{position:relative}
+  .is-pinned .mech__figs .figure{position:absolute;inset:0}
+  .is-pinned .mech__figs .figure:first-child{position:relative}
+}
+.mech__figs{display:none}
+@media(min-width:900px){.is-pinned .mech__figs{display:block}}
+
+/* ─────────────────────────────  signature (the one dark moment)  ───────────────────────────── */
+.sig{background:var(--graphite);color:var(--paper)}
+.sig .mono{color:color-mix(in srgb,var(--paper) 62%,transparent)}
+.sig h2{color:var(--paper);max-width:26ch}
+.sig__stage{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-block:clamp(3rem,8vh,6rem)}
+.sig__head{max-width:var(--maxw);margin-inline:auto;width:min(100% - (var(--gutter) * 2),var(--maxw))}
+.sig__note{margin-top:1rem;max-width:52ch;color:color-mix(in srgb,var(--paper) 68%,transparent);font-size:var(--t-small)}
+.sig__panel{
+  width:min(100% - (var(--gutter) * 2),var(--maxw));margin:clamp(1.5rem,4vh,3rem) auto 0;
+  display:grid;gap:clamp(1rem,3vw,2rem);grid-template-columns:1fr;
+  border-top:1px solid var(--hairline-dark);padding-top:clamp(1rem,3vh,2rem);
+}
+@media(min-width:900px){.sig__panel{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:stretch}}
+.sig__canvasWrap{position:relative;aspect-ratio:4/3;background:color-mix(in srgb,var(--paper) 4%,var(--graphite))}
+.sig__canvasWrap canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
+.sig__static{position:absolute;inset:0;display:grid;place-items:center;padding:2rem;text-align:center}
+.sig__instr{display:flex;flex-direction:column;gap:clamp(1rem,2.5vh,1.75rem);justify-content:center}
+.sig__readouts{display:flex;gap:clamp(1.25rem,4vw,2.5rem);flex-wrap:wrap}
+.sig__ro{min-width:6.5ch}
+.sig__ro b{
+  display:block;font-family:var(--f-display);font-size:clamp(1.8rem,1.2rem + 2vw,3rem);
+  font-weight:400;line-height:1;font-variant-numeric:tabular-nums;color:var(--paper);
+}
+.sig__ro.is-assist b{color:var(--accent-lift)}
+.sig__chart{width:100%;height:auto;display:block;overflow:visible}
+.sig__legend{display:flex;gap:1.5rem;flex-wrap:wrap}
+.sig__legend span{display:inline-flex;align-items:center;gap:0.5rem}
+.sig__sw{width:1.6rem;height:0;border-top:2px solid currentColor;flex:none}
+.sig__sw--eff{color:var(--paper)}
+.sig__sw--req{color:color-mix(in srgb,var(--paper) 45%,transparent);border-top-style:dashed}
+.sig__sw--as{color:var(--accent-lift);height:0.55rem;border-top:0;background:color-mix(in srgb,var(--accent-lift) 45%,transparent);border-radius:1px}
+
+/* ─────────────────────────────  evidence  ───────────────────────────── */
+.ev__grid{display:grid;gap:0;grid-template-columns:1fr;border-top:1px solid var(--hairline)}
+@media(min-width:640px){.ev__grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.ev__grid{grid-template-columns:repeat(4,1fr)}}
+.ev__cell{
+  padding:clamp(1.5rem,4vh,2.5rem) 0;
+  border-bottom:1px solid var(--hairline);
+}
+@media(min-width:640px){
+  .ev__cell{padding-inline:clamp(1rem,2.5vw,2rem);border-left:1px solid var(--hairline)}
+  .ev__cell:first-child{padding-left:0;border-left:0}
+}
+@media(min-width:1000px){
+  .ev__cell{border-bottom:0}
+}
+.ev__num{
+  font-family:var(--f-display);font-size:var(--t-num);line-height:0.92;
+  font-variant-numeric:tabular-nums;letter-spacing:-0.03em;display:block;
+}
+.ev__num sup{font-size:0.42em;vertical-align:super;letter-spacing:0}
+.ev__unit{font-size:0.44em;letter-spacing:-0.01em}
+.ev__lab{margin-top:0.9rem;max-width:22ch}
+.ev__notes{margin-top:clamp(2.5rem,6vh,4rem);display:grid;gap:1.25rem;grid-template-columns:1fr}
+@media(min-width:800px){.ev__notes{grid-template-columns:repeat(3,1fr);gap:clamp(1.5rem,3vw,3rem)}}
+.ev__note{padding-top:1rem;border-top:1px solid var(--hairline);max-width:44ch}
+.ev__note b{font-weight:500;color:var(--graphite);display:block;margin-bottom:0.35rem;font-family:var(--f-body)}
+.ev__note span{color:var(--slate);font-size:var(--t-small)}
+
+/* ─────────────────────────────  voices  ───────────────────────────── */
+.vox{background:var(--paper-deep)}
+.vox__stage{position:relative}
+.vox__q{max-width:46ch}
+.vox__q blockquote{
+  margin:0;font-family:var(--f-display);
+  font-size:clamp(1.3rem,0.95rem + 1.6vw,2.35rem);
+  line-height:1.28;letter-spacing:-0.01em;
+}
+.vox__q blockquote em{font-style:italic;color:var(--slate)}
+.vox__ph{
+  display:inline-block;margin-bottom:1.25rem;padding:0.3rem 0.6rem;
+  border:1px solid var(--hairline);color:var(--slate);
+  font-family:var(--f-mono);font-size:0.62rem;font-weight:500;letter-spacing:0.14em;
+}
+.vox__attr{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--hairline);max-width:36ch}
+.vox__q + .vox__q{margin-top:clamp(3rem,8vh,5rem)}
+@media(min-width:900px){
+  .is-pinned-vox .vox__stage{min-height:20rem}
+  .is-pinned-vox .vox__q{position:absolute;inset:0;margin-top:0!important}
+  .is-pinned-vox .vox__q:first-child{position:relative}
+}
+.vox__dots{display:flex;gap:0.5rem;margin-top:2.5rem}
+.vox__dot{width:2rem;height:1px;background:var(--hairline);transition:background .4s var(--ease)}
+.vox__dot.is-on{background:var(--accent)}
+
+/* ─────────────────────────────  team  ───────────────────────────── */
+.team__intro{display:grid;gap:clamp(1.5rem,4vw,3.5rem);grid-template-columns:1fr}
+@media(min-width:900px){.team__intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.team__grid{
+  margin-top:clamp(2.5rem,7vh,4.5rem);
+  display:grid;gap:clamp(1.25rem,3vw,2.5rem);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));
+}
+.team__disc{
+  margin-top:clamp(2.5rem,6vh,4rem);padding-top:1.25rem;
+  border-top:1px solid var(--hairline);max-width:60ch;
+}
+
+/* ─────────────────────────────  inquiry  ───────────────────────────── */
+.inq{background:var(--paper-deep)}
+.inq__grid{display:grid;gap:clamp(2rem,5vw,4rem);grid-template-columns:1fr}
+@media(min-width:900px){.inq__grid{grid-template-columns:minmax(0,0.85fr) minmax(0,1fr)}}
+.form{display:grid;gap:clamp(1.1rem,2.5vh,1.6rem)}
+.field{display:grid;gap:0.45rem}
+.field label{font-family:var(--f-mono);font-size:var(--t-cap);font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate)}
+.field input,.field textarea{
+  font-family:var(--f-body);font-size:var(--t-body);color:var(--graphite);
+  background:transparent;border:0;border-bottom:1px solid var(--hairline);
+  padding:0.55rem 0;border-radius:0;
+  transition:border-color .3s var(--ease);
+  width:100%;
+}
+.field input:focus,.field textarea:focus{outline:none;border-bottom-color:var(--accent)}
+.field input:focus-visible,.field textarea:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.field textarea{resize:vertical;min-height:5.5rem;line-height:1.5}
+.req{color:var(--accent)}
+
+.seg{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hairline);border-radius:2px;overflow:hidden}
+.seg__opt{flex:1 1 auto;min-width:max-content}
+.seg__opt input{position:absolute;opacity:0;pointer-events:none}
+.seg__opt span{
+  display:block;text-align:center;padding:0.7rem 1rem;cursor:pointer;
+  font-family:var(--f-mono);font-size:var(--t-cap);font-weight:500;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--slate);
+  border-left:1px solid var(--hairline);
+  transition:background .28s var(--ease),color .28s var(--ease);
+  white-space:normal;
+}
+.seg__opt:first-child span{border-left:0}
+.seg__opt span:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--graphite)}
+.seg__opt input:checked + span{background:var(--accent);color:#fff}
+.seg__opt input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+
+.form__foot{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;margin-top:0.5rem}
+.form__status{font-family:var(--f-mono);font-size:var(--t-cap);letter-spacing:0.06em;color:var(--slate);max-width:34ch}
+.form__done{display:none}
+.form.is-done .form__body{display:none}
+.form.is-done .form__done{display:block}
+
+/* ─────────────────────────────  footer  ───────────────────────────── */
+.foot{background:var(--graphite);color:color-mix(in srgb,var(--paper) 72%,transparent);padding-block:clamp(3rem,8vh,5rem)}
+.foot .mono{color:color-mix(in srgb,var(--paper) 52%,transparent)}
+.foot a{color:var(--paper)}
+.foot__top{display:grid;gap:clamp(1.5rem,4vw,3rem);grid-template-columns:1fr}
+@media(min-width:800px){.foot__top{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr)}}
+.foot__compliance{
+  margin-top:clamp(2.5rem,6vh,4rem);padding-top:1.25rem;
+  border-top:1px solid var(--hairline-dark);max-width:78ch;font-size:var(--t-small);
+  color:color-mix(in srgb,var(--paper) 60%,transparent);
+}
+.foot__meta{margin-top:2rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:baseline}
+
+/* ─────────────────────────────  motion: JS-gated  ─────────────────────────────
+   Content is visible by default. Only when JS confirms motion is allowed does
+   it hide things for animating in. No-JS and reduced-motion users get
+   everything, statically. */
+.js-anim .reveal{opacity:0;transform:translateY(1.35rem)}
+.js-anim .clipfig .figure__frame{clip-path:inset(0 0 100% 0)}
+.js-anim .problem__body .w{opacity:0.14}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .clipfig .figure__frame{clip-path:none!important}
+  .problem__body .w{opacity:1!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__in">
+    <a class="wordmark" href="#top">Exo<span>Flex</span></a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#problem">Context</a>
+      <a href="#mechanism">Mechanism</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#team">Team</a>
+    </nav>
+    <a class="btn btn--ghost" href="#inquiry">Request a demonstration <span class="btn__arrow" aria-hidden="true">→</span></a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ─────────────  1 · HERO  ───────────── -->
+<section class="hero wrap" id="top">
+  <p class="mono hero__eyebrow reveal">Investigational device · Upper-limb rehabilitation · Sherbrooke, Québec</p>
+
+  <h1 class="hero__h1 reveal">A portable upper-limb device that reads the movement a patient is attempting, and adds only the assistance that movement is missing.</h1>
+
+  <p class="hero__sub reveal">ExoFlex fuses surface EMG, inertial measurement and force sensing under an Assist-As-Needed control strategy, so support scales to effort in real time — on a clinic table, or in a living room after discharge.</p>
+
+  <div class="hero__cta reveal">
+    <a class="btn" href="#inquiry">Request a clinical demonstration <span class="btn__arrow" aria-hidden="true">→</span></a>
+    <a class="hero__cue" href="#problem">Why portability ↓</a>
+  </div>
+
+  <figure class="figure hero__figure clipfig ar-1610">
+    <div class="figure__frame">
+      <img src="images/hero/device-therapy-table.jpg"
+           alt="The ExoFlex upper-limb device resting on a therapy table in daylight, forearm cuff open and straps laid flat."
+           width="2000" height="1250" decoding="async" data-ph="metal">
+    </div>
+    <figcaption class="figure__cap mono">
+      <span class="idx">Fig. 01</span>
+      <span class="txt mono--plain">Device on therapy table, daylight — forearm cuff, wrist linkage, actuator housing</span>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ─────────────  2 · PROBLEM  ───────────── -->
+<section class="sec problem" id="problem">
+  <div class="wrap sec__grid">
+    <div class="sec__rail"><p class="mono">01 — Context</p></div>
+    <div>
+      <p class="problem__body" data-split>Upper-limb recovery after a stroke is measured in months. Supervised therapy is usually measured in weeks, and the equipment that makes high-repetition practice possible stays behind in the clinic.</p>
+      <p class="problem__note body-col reveal">Portability moves the constraint. When the device leaves with the patient, the amount of practice available is governed by the person's own capacity and their clinician's plan — not by the room the equipment happens to live in.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────  3 · GALLERY  ───────────── -->
+<section class="sec wrap" id="gallery" aria-labelledby="gallery-h">
+  <div class="sec__grid" style="margin-bottom:clamp(2rem,5vh,3.5rem)">
+    <div class="sec__rail"><p class="mono">02 — Hardware</p></div>
+    <div>
+      <h2 id="gallery-h" class="reveal" style="max-width:24ch">The parts, named.</h2>
+      <p class="body-col reveal" style="margin-top:1.25rem">Assemblies shown as built. Captions name the component rather than describing the photograph.</p>
+    </div>
+  </div>
+
+  <div class="gal" data-gal>
+    <figure class="figure g1 clipfig ar-34" data-depth="0.06">
+      <div class="figure__frame">
+        <img src="images/gallery/forearm-cuff.jpg" alt="Inner shell of the forearm cuff, showing the padded liner and strap channels." width="1200" height="1600" loading="lazy" decoding="async" data-ph="shell">
+      </div>
+      <figcaption class="figure__cap mono"><span class="idx">02.1</span><span class="txt mono--plain">Forearm cuff, inner shell</span></figcaption>
+    </figure>
+
+    <figure class="figure g2 clipfig ar-11" data-depth="0.12">
+      <div class="figure__frame">
+        <img src="images/gallery/emg-array.jpg" alt="Close view of the surface EMG electrode array and its flexible interconnect." width="1400" height="1400" loading="lazy" decoding="async" data-ph="metal">
+      </div>
+      <figcaption class="figure__cap mono"><span class="idx">02.2</span><span class="txt mono--plain">Surface EMG electrode array</span></figcaption>
+    </figure>
+
+    <figure class="figure g3 clipfig ar-43" data-depth="0.04">
+      <div class="figure__frame">
+        <img src="images/gallery/actuator-housing.jpg" alt="Actuator housing viewed from the drive side, with the output shaft and mounting bosses visible." width="1600" height="1200" loading="lazy" decoding="async" data-ph="metal">
+      </div>
+      <figcaption class="figure__cap mono"><span class="idx">02.3</span><span class="txt mono--plain">Actuator housing, drive side</span></figcaption>
+    </figure>
+
+    <figure class="figure g4 clipfig ar-34" data-depth="0.1">
+      <div class="figure__frame">
+        <img src="images/gallery/cable-routing.jpg" alt="Cable routing along the forearm shell with strain relief at the connector entry." width="1200" height="1600" loading="lazy" decoding="async" data-ph="shell">
+      </div>
+      <figcaption class="figure__cap mono"><span class="idx">02.4</span><span class="txt mono--plain">Cable routing and strain relief</span></figcaption>
+    </figure>
+
+    <figure class="figure g5 clipfig ar-43" data-depth="0.05">
+      <div class="figure__frame">
+        <img src="images/gallery/hand-mid-grasp.jpg" alt="A hand mid-grasp inside the device as the fingers close around a cylindrical object." width="1600" height="1200" loading="lazy" decoding="async" data-ph="warm">
+      </div>
+      <figcaption class="figure__cap mono"><span class="idx">02.5</span><span class="txt mono--plain">Hand mid-grasp, assisted closure</span></figcaption>
+    </figure>
+
+    <figure class="figure g6 clipfig ar-169" data-depth="0.03">
+      <div class="figure__frame">
+        <img src="images/gallery/device-daylight.jpg" alt="The full device worn on a seated participant's forearm in a daylit treatment room." width="2000" height="1125" loading="lazy" decoding="async" data-ph="room">
+      </div>
+      <figcaption class="figure__cap mono"><span class="idx">02.6</span><span class="txt mono--plain">Worn configuration, treatment room</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────  4 · MECHANISM (pinned)  ───────────── -->
+<section class="sec mech" id="mechanism" aria-labelledby="mech-h">
+  <div class="wrap">
+    <div class="sec__grid" style="margin-bottom:clamp(2rem,5vh,3.5rem)">
+      <div class="sec__rail"><p class="mono">03 — Mechanism</p></div>
+      <div>
+        <h2 id="mech-h" class="reveal" style="max-width:22ch">Four parts of one system.</h2>
+      </div>
+    </div>
+
+    <div class="mech__stage" data-mech>
+      <div>
+        <div class="mech__ticks" role="tablist" aria-label="Mechanism steps">
+          <button class="mech__tick is-on" type="button" role="tab" aria-selected="true" aria-controls="mp1" data-tick="0">01 Intent</button>
+          <button class="mech__tick" type="button" role="tab" aria-selected="false" aria-controls="mp2" data-tick="1">02 Assist</button>
+          <button class="mech__tick" type="button" role="tab" aria-selected="false" aria-controls="mp3" data-tick="2">03 Portability</button>
+          <button class="mech__tick" type="button" role="tab" aria-selected="false" aria-controls="mp4" data-tick="3">04 Data</button>
+        </div>
+
+        <div class="mech__panels">
+          <article class="mech__panel" id="mp1" data-panel="0">
+            <span class="mono num">01 / Intent detection</span>
+            <h3>The device waits to be asked.</h3>
+            <p class="body-col">Surface EMG electrodes on the forearm register the muscle activation that precedes visible movement. Inertial measurement units track segment orientation, and force sensors at the cuff measure what the limb is actually delivering. Fusing the three streams lets the controller separate an attempted movement from tremor, noise, or the passive weight of the arm.</p>
+            <figure class="figure mech__art clipfig ar-43">
+              <div class="figure__frame"><img src="images/mechanism/01-intent.jpg" alt="EMG electrodes positioned on a forearm before the cuff is closed." width="1600" height="1200" loading="lazy" decoding="async" data-ph="warm"></div>
+            </figure>
+          </article>
+
+          <article class="mech__panel" id="mp2" data-panel="1">
+            <span class="mono num">02 / Assist-As-Needed</span>
+            <h3>Support is the deficit, not the motion.</h3>
+            <p class="body-col">The controller compares the movement being attempted against the trajectory that movement requires, and closes only the difference. As the user's own contribution rises, assistance falls, which keeps the person doing the work the device exists to make possible. Torque and range are bounded at every step of the loop.</p>
+            <figure class="figure mech__art clipfig ar-43">
+              <div class="figure__frame"><img src="images/mechanism/02-assist.jpg" alt="The wrist linkage part-way through an assisted extension." width="1600" height="1200" loading="lazy" decoding="async" data-ph="metal"></div>
+            </figure>
+          </article>
+
+          <article class="mech__panel" id="mp3" data-panel="2">
+            <span class="mono num">03 / Portability</span>
+            <h3>Therapy follows the patient.</h3>
+            <p class="body-col">The system is worn rather than mounted, runs from an onboard battery, and is fitted without a technician present. Practice is no longer tied to a fixed frame in a treatment room, which puts the schedule back in the hands of the clinician and the household rather than the equipment.</p>
+            <figure class="figure mech__art clipfig ar-43">
+              <div class="figure__frame"><img src="images/mechanism/03-portability.jpg" alt="The device packed in its carry case beside a domestic dining table." width="1600" height="1200" loading="lazy" decoding="async" data-ph="room"></div>
+            </figure>
+          </article>
+
+          <article class="mech__panel" id="mp4" data-panel="3">
+            <span class="mono num">04 / Session data</span>
+            <h3>Every session leaves a record.</h3>
+            <p class="body-col">Repetitions, active range, effort distribution and the quantity of assistance supplied are captured per session. The clinician reads a measurable trace between appointments instead of a recollection at the next one, and can adjust the plan against what actually happened.</p>
+            <figure class="figure mech__art clipfig ar-43">
+              <div class="figure__frame"><img src="images/mechanism/04-data.jpg" alt="A clinician reviewing a session summary on a tablet." width="1600" height="1200" loading="lazy" decoding="async" data-ph="shell"></div>
+            </figure>
+          </article>
+        </div>
+      </div>
+
+      <!-- desktop pinned imagery, crossfaded with the panels -->
+      <div class="mech__figs" aria-hidden="true">
+        <figure class="figure ar-43" data-fig="0"><div class="figure__frame"><img src="images/mechanism/01-intent.jpg" alt="" width="1600" height="1200" loading="lazy" decoding="async" data-ph="warm"></div></figure>
+        <figure class="figure ar-43" data-fig="1"><div class="figure__frame"><img src="images/mechanism/02-assist.jpg" alt="" width="1600" height="1200" loading="lazy" decoding="async" data-ph="metal"></div></figure>
+        <figure class="figure ar-43" data-fig="2"><div class="figure__frame"><img src="images/mechanism/03-portability.jpg" alt="" width="1600" height="1200" loading="lazy" decoding="async" data-ph="room"></div></figure>
+        <figure class="figure ar-43" data-fig="3"><div class="figure__frame"><img src="images/mechanism/04-data.jpg" alt="" width="1600" height="1200" loading="lazy" decoding="async" data-ph="shell"></div></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────  5 · SIGNATURE  ───────────── -->
+<section class="sig on-dark" id="signature" aria-labelledby="sig-h">
+  <div class="sig__stage" data-sig>
+    <div class="sig__head">
+      <p class="mono" style="margin-bottom:1.25rem">04 — Control strategy</p>
+      <h2 id="sig-h">Assistance is the difference, not the movement.</h2>
+      <p class="sig__note">Scroll to advance one assisted reach and grasp. The pale trace is the patient's own effort. The accent band is everything the device adds — bounded, and never more than the gap.</p>
+    </div>
+
+    <div class="sig__panel">
+      <div class="sig__canvasWrap" data-sigcanvas>
+        <!-- Three.js canvas is injected here when motion + WebGL are available -->
+        <div class="sig__static" data-sigstatic>
+          <p class="mono mono--plain" style="max-width:30ch">Static view — the animated sequence is disabled because reduced motion is preferred or WebGL is unavailable. The chart alongside shows the same relationship.</p>
+        </div>
+      </div>
+
+      <div class="sig__instr">
+        <div class="sig__readouts">
+          <div class="sig__ro">
+            <b data-ro="effort">64</b>
+            <span class="mono">Patient effort %</span>
+          </div>
+          <div class="sig__ro is-assist">
+            <b data-ro="assist">36</b>
+            <span class="mono">Assist supplied %</span>
+          </div>
+          <div class="sig__ro">
+            <b data-ro="phase" style="font-size:clamp(1rem,0.8rem + 0.6vw,1.35rem);letter-spacing:0.04em">REACH</b>
+            <span class="mono">Phase</span>
+          </div>
+        </div>
+
+        <svg class="sig__chart" viewBox="0 0 420 190" role="img" aria-labelledby="chart-t chart-d" preserveAspectRatio="none">
+          <title id="chart-t">Effort and assistance across one assisted movement</title>
+          <desc id="chart-d">The trajectory the movement requires is shown as a dashed line. The patient's own effort dips in the middle of the reach. Assistance, shown as a filled band, rises only to close the gap between the two, and returns to zero as effort recovers.</desc>
+          <defs>
+            <clipPath id="sigClip"><rect x="0" y="0" width="0" height="190" data-clip></rect></clipPath>
+          </defs>
+          <g stroke="currentColor" opacity="0.18">
+            <line x1="0" y1="20" x2="420" y2="20" stroke-width="1"></line>
+            <line x1="0" y1="105" x2="420" y2="105" stroke-width="1"></line>
+            <line x1="0" y1="170" x2="420" y2="170" stroke-width="1"></line>
+          </g>
+          <g clip-path="url(#sigClip)">
+            <path data-p="assist" fill="#58AEC4" fill-opacity="0.34"></path>
+            <path data-p="req" fill="none" stroke="currentColor" stroke-opacity="0.42" stroke-width="1.5" stroke-dasharray="5 5"></path>
+            <path data-p="eff" fill="none" stroke="currentColor" stroke-width="2"></path>
+          </g>
+          <line data-playhead x1="0" y1="0" x2="0" y2="190" stroke="#58AEC4" stroke-width="1" opacity="0.75"></line>
+        </svg>
+
+        <div class="sig__legend mono">
+          <span><i class="sig__sw sig__sw--eff" aria-hidden="true"></i> Own effort</span>
+          <span><i class="sig__sw sig__sw--req" aria-hidden="true"></i> Required</span>
+          <span><i class="sig__sw sig__sw--as" aria-hidden="true"></i> Assist</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────  6 · EVIDENCE  ───────────── -->
+<section class="sec wrap" id="evidence" aria-labelledby="ev-h">
+  <div class="sec__grid" style="margin-bottom:clamp(2rem,5vh,3.5rem)">
+    <div class="sec__rail"><p class="mono">05 — Validation</p></div>
+    <div>
+      <h2 id="ev-h" class="reveal" style="max-width:20ch">Validation in progress.</h2>
+      <p class="body-col reveal" style="margin-top:1.25rem">Figures below describe clinician-reported perception and development funding. They are not measures of clinical effectiveness.</p>
+    </div>
+  </div>
+
+  <div class="ev__grid">
+    <div class="ev__cell reveal">
+      <span class="ev__num" data-count="62">62</span>
+      <p class="ev__lab mono mono--plain">Clinicians surveyed across the United States</p>
+    </div>
+    <div class="ev__cell reveal">
+      <span class="ev__num" data-count="88">88<span class="ev__unit">%</span></span>
+      <p class="ev__lab mono mono--plain">Reported strong perceived clinical value</p>
+    </div>
+    <div class="ev__cell reveal">
+      <span class="ev__num" data-count="96">96<span class="ev__unit">%</span></span>
+      <p class="ev__lab mono mono--plain">Indicated they would use or recommend the device</p>
+    </div>
+    <div class="ev__cell reveal">
+      <span class="ev__num"><span class="ev__unit">$</span><span data-count="400">400</span><span class="ev__unit">K+</span></span>
+      <p class="ev__lab mono mono--plain">CAD raised across more than 21 pitch and grant competitions</p>
+    </div>
+  </div>
+
+  <div class="ev__notes">
+    <div class="ev__note reveal">
+      <b>Survey scope</b>
+      <span>A 62-respondent survey of United States rehabilitation clinicians, capturing perceived clinical value and stated intent to use. Self-reported, pre-market, and not an outcome study.</span>
+    </div>
+    <div class="ev__note reveal">
+      <b>Clinical validation</b>
+      <span>Validation work is ongoing with rehabilitation partners, including Villa Medica. Results are not yet published and no efficacy claim is made on this page.</span>
+    </div>
+    <div class="ev__note reveal">
+      <b>Research grounding</b>
+      <span>Engineering and research base at Université de Sherbrooke, where the device originated as a capstone project in 2023.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────  7 · CLINICIAN VOICES  ───────────── -->
+<section class="sec vox" id="voices" aria-labelledby="vox-h">
+  <div class="wrap sec__grid">
+    <div class="sec__rail"><p class="mono">06 — Clinicians</p></div>
+    <div>
+      <h2 id="vox-h" class="vh">What clinicians say</h2>
+      <div class="vox__stage" data-vox>
+        <div class="vox__q" data-q="0">
+          <span class="vox__ph">Placeholder · pending clinician review</span>
+          <blockquote><em>Quote to be supplied. Intended theme: the device sustains a patient's own effort rather than replacing it, and the therapist can see that in the session data.</em></blockquote>
+          <p class="vox__attr mono mono--plain">Physiotherapist — inpatient neurological rehabilitation</p>
+        </div>
+        <div class="vox__q" data-q="1">
+          <span class="vox__ph">Placeholder · pending clinician review</span>
+          <blockquote><em>Quote to be supplied. Intended theme: what changes for a caseload when high-repetition practice can continue after discharge.</em></blockquote>
+          <p class="vox__attr mono mono--plain">Occupational therapist — outpatient neuro clinic</p>
+        </div>
+        <div class="vox__q" data-q="2">
+          <span class="vox__ph">Placeholder · pending clinician review</span>
+          <blockquote><em>Quote to be supplied. Intended theme: fit with existing workflow, setup time, and what a clinic director needs before adopting a new device.</em></blockquote>
+          <p class="vox__attr mono mono--plain">Clinical director — private rehabilitation group</p>
+        </div>
+        <div class="vox__dots" aria-hidden="true">
+          <i class="vox__dot is-on"></i><i class="vox__dot"></i><i class="vox__dot"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────  8 · TEAM & ORIGIN  ───────────── -->
+<section class="sec wrap" id="team" aria-labelledby="team-h">
+  <div class="sec__grid">
+    <div class="sec__rail"><p class="mono">07 — Origin</p></div>
+    <div>
+      <div class="team__intro">
+        <h2 id="team-h" class="reveal" style="max-width:18ch">Nine students, one capstone, 2023.</h2>
+        <div>
+          <p class="body-col reveal">ExoFlex began as a capstone engineering project at Université de Sherbrooke: nine students, one prototype, and an academic deadline. It became a company because the clinicians who handled that prototype asked when they could use it on a caseload. The founding team still does the engineering.</p>
+          <p class="body-col reveal" style="margin-top:1.1em">The discipline matters as much as the mechanism. Risk management follows ISO 14971, and a quality management system is maintained alongside development rather than assembled after the fact — because a device that goes home with a patient has to be defensible before it is impressive.</p>
+        </div>
+      </div>
+
+      <div class="team__grid">
+        <figure class="figure clipfig ar-45">
+          <div class="figure__frame"><img src="images/team/felix-roy.jpg" alt="Portrait of Félix Roy." width="1000" height="1250" loading="lazy" decoding="async" data-ph="warm"></div>
+          <figcaption class="figure__cap mono"><span class="txt mono--plain">Félix Roy — Co-founder, CEO</span></figcaption>
+        </figure>
+        <figure class="figure clipfig ar-45">
+          <div class="figure__frame"><img src="images/team/olivier-jackson.jpg" alt="Portrait of Olivier Jackson." width="1000" height="1250" loading="lazy" decoding="async" data-ph="warm"></div>
+          <figcaption class="figure__cap mono"><span class="txt mono--plain">Olivier Jackson — Co-founder, COO</span></figcaption>
+        </figure>
+        <figure class="figure clipfig ar-45">
+          <div class="figure__frame"><img src="images/team/simon-chayer.jpg" alt="Portrait of Simon Chayer." width="1000" height="1250" loading="lazy" decoding="async" data-ph="warm"></div>
+          <figcaption class="figure__cap mono"><span class="txt mono--plain">Simon Chayer — Co-founder, CTO</span></figcaption>
+        </figure>
+      </div>
+
+      <p class="team__disc mono mono--plain reveal">Team list abridged. Confirm names, roles and portrait releases before publication.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────  9 · INQUIRY  ───────────── -->
+<section class="sec inq" id="inquiry" aria-labelledby="inq-h">
+  <div class="wrap sec__grid">
+    <div class="sec__rail"><p class="mono">08 — Contact</p></div>
+    <div class="inq__grid">
+      <div>
+        <h2 id="inq-h" class="reveal" style="max-width:16ch">Start a conversation.</h2>
+        <p class="body-col reveal" style="margin-top:1.25rem">Tell us which conversation you want to have and it will be routed accordingly. Clinical enquiries reach the team that runs the demonstrations.</p>
+        <p class="mono mono--plain reveal" style="margin-top:2rem;max-width:34ch">info@exoflex.ca<br>Sherbrooke, Québec, Canada</p>
+      </div>
+
+      <form class="form" data-form novalidate>
+        <div class="form__body">
+          <fieldset style="border:0;padding:0;margin:0 0 0.5rem">
+            <legend class="mono" style="margin-bottom:0.75rem;padding:0">Nature of enquiry</legend>
+            <div class="seg">
+              <label class="seg__opt"><input type="radio" name="interest" value="clinical" checked><span>Clinical partnership</span></label>
+              <label class="seg__opt"><input type="radio" name="interest" value="investment"><span>Investment</span></label>
+              <label class="seg__opt"><input type="radio" name="interest" value="general"><span>General</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="f-name">Name <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-role">Role <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-role" name="role" type="text" autocomplete="organization-title" placeholder="Physiotherapist, clinic director, analyst…" required>
+          </div>
+          <div class="field">
+            <label for="f-inst">Institution</label>
+            <input id="f-inst" name="institution" type="text" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="f-email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="f-msg">What would you like to see</label>
+            <textarea id="f-msg" name="message" rows="3"></textarea>
+          </div>
+
+          <div class="form__foot">
+            <button class="btn" type="submit">Request a clinical demonstration <span class="btn__arrow" aria-hidden="true">→</span></button>
+            <p class="form__status" data-status role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="form__done" role="status">
+          <p class="mono" style="color:var(--accent);margin-bottom:1rem">Prototype — no data was transmitted</p>
+          <p class="lead" style="max-width:30ch">This is where the confirmation state appears once the form is wired to an endpoint.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot on-dark">
+  <div class="wrap">
+    <div class="foot__top">
+      <p class="wordmark" style="font-size:1.6rem">Exo<span style="color:var(--accent-lift)">Flex</span></p>
+      <div>
+        <p class="mono" style="margin-bottom:0.75rem">Investigational device</p>
+        <p style="max-width:52ch;font-size:var(--t-small)">A portable upper-limb assistive device for post-stroke rehabilitation, in development at Université de Sherbrooke and in ongoing validation with rehabilitation partners.</p>
+      </div>
+    </div>
+
+    <p class="foot__compliance">
+      ExoFlex is an investigational device. It is not cleared, licensed or approved for sale by Health Canada, the U.S. Food and Drug Administration, or any other regulatory authority, and it is not available for commercial distribution. Descriptions on this page refer to device function and to validation work in progress. Nothing here is a claim of clinical benefit, treatment outcome, cure, or regulatory clearance. Survey figures reflect clinician-reported perceptions, not measured clinical effectiveness. Any use of the device occurs under the supervision of a qualified clinician within an approved study protocol.
+    </p>
+
+    <div class="foot__meta">
+      <p class="mono">© <span data-year>2026</span> ExoFlex</p>
+      <p class="mono">Sherbrooke, Québec</p>
+      <p class="mono"><a href="mailto:info@exoflex.ca">info@exoflex.ca</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────────  libraries  ───────────── -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js" } }
+</script>
+
+<!-- ─────────────  page behaviour  ───────────── -->
+<script>
+(function () {
+  "use strict";
+
+  const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const HAS_GSAP = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+  const MOTION = !REDUCE && HAS_GSAP;
+
+  document.querySelector("[data-year]").textContent = String(new Date().getFullYear());
+
+  /* ══════════════  procedural placeholders  ══════════════
+     Each <img> points at the real intended path. Until those files exist the
+     request fails and we substitute a generated duotone field so the page can
+     be judged on composition and typography. Drop the photography in and this
+     code never runs. */
+
+  const PH_PALETTE = {
+    metal: [[214, 216, 218], [104, 112, 119], [ 26,  32,  36]],
+    shell: [[243, 240, 234], [206, 199, 188], [122, 120, 115]],
+    warm:  [[227, 214, 203], [176, 155, 141], [ 74,  66,  61]],
+    room:  [[240, 237, 230], [199, 197, 190], [ 96, 102, 106]]
+  };
+
+  function mulberry(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t = (t + 0x6D2B79F5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // one reusable grain tile — far cheaper than a per-pixel pass per image
+  const GRAIN = (function () {
+    const c = document.createElement("canvas");
+    c.width = c.height = 96;
+    const g = c.getContext("2d");
+    const px = g.createImageData(96, 96);
+    const d = px.data;
+    const rand = mulberry(99);
+    for (let i = 0; i < d.length; i += 4) {
+      const v = 128 + (rand() - 0.5) * 46;
+      d[i] = d[i + 1] = d[i + 2] = v;
+      d[i + 3] = 26;
+    }
+    g.putImageData(px, 0, 0);
+    return c;
+  })();
+
+  function makePlaceholder(w, h, variant, seed) {
+    const stops = PH_PALETTE[variant] || PH_PALETTE.metal;
+    const rand = mulberry(seed);
+    const cv = document.createElement("canvas");
+    // render small; it is scaled up and reads as shallow depth of field
+    const S = 0.34;
+    cv.width = Math.max(2, Math.round(w * S));
+    cv.height = Math.max(2, Math.round(h * S));
+    const g = cv.getContext("2d");
+    const W = cv.width, H = cv.height;
+
+    const rgb = (c, a) => "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + (a === undefined ? 1 : a) + ")";
+
+    // base sweep
+    const ang = rand() * Math.PI;
+    const lg = g.createLinearGradient(
+      W / 2 - Math.cos(ang) * W, H / 2 - Math.sin(ang) * H,
+      W / 2 + Math.cos(ang) * W, H / 2 + Math.sin(ang) * H
+    );
+    lg.addColorStop(0, rgb(stops[0]));
+    lg.addColorStop(0.5 + rand() * 0.18, rgb(stops[1]));
+    lg.addColorStop(1, rgb(stops[2]));
+    g.fillStyle = lg;
+    g.fillRect(0, 0, W, H);
+
+    // soft bands — read as machined edges falling out of focus
+    for (let i = 0; i < 3; i++) {
+      g.save();
+      g.translate(W * (0.15 + rand() * 0.7), H * (0.15 + rand() * 0.7));
+      g.rotate((rand() - 0.5) * 2.4);
+      const bw = W * (0.5 + rand() * 1.4), bh = H * (0.06 + rand() * 0.2);
+      const bg = g.createLinearGradient(0, -bh, 0, bh);
+      const pick = stops[rand() > 0.5 ? 0 : 2];
+      bg.addColorStop(0, rgb(pick, 0));
+      bg.addColorStop(0.5, rgb(pick, 0.34));
+      bg.addColorStop(1, rgb(pick, 0));
+      g.fillStyle = bg;
+      g.fillRect(-bw / 2, -bh, bw, bh * 2);
+      g.restore();
+    }
+
+    // soft volumes — suggest form without pretending to be a photograph
+    for (let i = 0; i < 4; i++) {
+      const cx = rand() * W, cy = rand() * H;
+      const r = (0.22 + rand() * 0.5) * Math.max(W, H);
+      const rg = g.createRadialGradient(cx, cy, 0, cx, cy, r);
+      const pick = stops[Math.floor(rand() * stops.length)];
+      rg.addColorStop(0, rgb(pick, 0.48));
+      rg.addColorStop(1, rgb(pick, 0));
+      g.fillStyle = rg;
+      g.fillRect(0, 0, W, H);
+    }
+
+    // one specular streak for a machined read
+    g.save();
+    g.globalCompositeOperation = "lighter";
+    g.translate(rand() * W, rand() * H);
+    g.rotate((rand() - 0.5) * 1.5);
+    const sg = g.createLinearGradient(0, -H * 0.5, 0, H * 0.5);
+    sg.addColorStop(0, "rgba(255,255,255,0)");
+    sg.addColorStop(0.5, "rgba(255,255,255,0.2)");
+    sg.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = sg;
+    g.fillRect(-W, -H * 0.5, W * 2, H);
+    g.restore();
+
+    // grain, tiled
+    const pat = g.createPattern(GRAIN, "repeat");
+    if (pat) { g.fillStyle = pat; g.fillRect(0, 0, W, H); }
+
+    // vignette
+    const vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.25, W / 2, H / 2, Math.max(W, H) * 0.78);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(0,0,0,0.28)");
+    g.fillStyle = vg;
+    g.fillRect(0, 0, W, H);
+
+    return cv.toDataURL("image/jpeg", 0.74);
+  }
+
+  /* Placeholder first, photograph second.
+     Waiting for an <img> error is unreliable: a lazy image that never enters
+     the viewport never requests, never errors, and leaves an empty frame. So
+     each figure gets a generated field as its actual src, then we probe the
+     intended path off to the side and upgrade only if a real file answers. */
+  let phSeed = 7;
+  const phQueue = [];
+
+  document.querySelectorAll("img[data-ph]").forEach((img) => {
+    const real = img.getAttribute("src");
+    const seed = (phSeed += 1013);
+    const w = parseInt(img.getAttribute("width"), 10) || 1200;
+    const h = parseInt(img.getAttribute("height"), 10) || 900;
+    const fig = img.closest(".figure");
+
+    img.removeAttribute("src");        // stop the doomed request before it starts
+    img.removeAttribute("loading");    // we schedule this ourselves
+
+    const build = () => {
+      if (img.dataset.phDone) return;
+      img.dataset.phDone = "1";
+      img.src = makePlaceholder(w, h, img.dataset.ph, seed);
+      if (fig) fig.classList.add("is-ph");
+      // upgrade if the real photograph has been dropped in
+      const probe = new Image();
+      probe.onload = () => {
+        img.src = real;
+        if (fig) fig.classList.remove("is-ph");
+      };
+      probe.src = real;
+    };
+
+    phQueue.push({ img: img, build: build, fig: fig });
+  });
+
+  /* ── viewport passes ──────────────────────────────────────────────────
+     Deliberately not IntersectionObserver. IO delivery is suppressed in
+     non-compositing contexts (background tabs, offscreen/headless panes) —
+     verified in testing, where even a default observer never fired. Anything
+     that decides whether content is *visible* therefore cannot depend on it.
+     A rAF-throttled getBoundingClientRect pass over a handful of elements is
+     cheap, synchronous, and always correct. */
+  const passes = [];
+  let passQueued = false;
+
+  function runPasses() {
+    const vh = window.innerHeight;
+    passes.forEach((p) => {
+      for (let i = p.items.length - 1; i >= 0; i--) {
+        const el = p.items[i];
+        const r = el.getBoundingClientRect();
+        if (p.hit(r, vh)) { p.items.splice(i, 1); p.run(el); }
+      }
+    });
+  }
+  function schedulePass() {
+    if (passQueued) return;
+    passQueued = true;
+    requestAnimationFrame(() => { passQueued = false; runPasses(); });
+  }
+  window.addEventListener("scroll", schedulePass, { passive: true });
+  window.addEventListener("resize", schedulePass);
+  window.addEventListener("load", schedulePass);
+  window.__pass = schedulePass;
+
+  // build each placeholder shortly before it scrolls into view
+  const phByEl = new Map();
+  phQueue.forEach((rec) => phByEl.set(rec.fig || rec.img, rec));
+  passes.push({
+    items: Array.from(phByEl.keys()),
+    hit: (r, vh) => r.top < vh + 400 && r.bottom > -400,
+    run: (el) => phByEl.get(el).build()
+  });
+  schedulePass();
+
+  // last resort: never leave a frame empty, whatever happened above
+  setTimeout(() => phQueue.forEach((rec) => rec.build()), 2500);
+
+  /* ══════════════  form  ══════════════ */
+  const form = document.querySelector("[data-form]");
+  const status = form.querySelector("[data-status]");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const missing = [];
+    ["f-name", "f-role", "f-email"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) missing.push(el);
+    });
+    const email = document.getElementById("f-email");
+    if (email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) missing.push(email);
+
+    if (missing.length) {
+      status.textContent = "Complete the required fields to continue.";
+      missing[0].focus();
+      return;
+    }
+    status.textContent = "";
+    form.classList.add("is-done");
+    form.querySelector(".form__done").focus?.();
+  });
+
+  /* ══════════════  static: nothing below runs without motion  ══════════════ */
+  if (!MOTION) {
+    /* Draw the whole curve at once, then set the readouts to the moment of peak
+       assistance — the single most informative frame — so the numbers agree
+       with the chart instead of keeping the markup's placeholder values. */
+    drawChart(1);
+    document.querySelector("[data-playhead]").setAttribute("opacity", "0");
+    const peak = 0.38;
+    const rq = required(peak), ef = effort(peak);
+    const aPct = Math.round(((rq - ef) / (rq || 1)) * 100);
+    document.querySelector('[data-ro="effort"]').textContent = String(100 - aPct);
+    document.querySelector('[data-ro="assist"]').textContent = String(aPct);
+    document.querySelector('[data-ro="phase"]').textContent = "REACH";
+    return;
+  }
+
+  document.documentElement.classList.add("js-anim");
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* smooth scrolling */
+  const lenis = new Lenis({ duration: 1.05, smoothWheel: true, touchMultiplier: 1.6 });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const el = document.querySelector(a.getAttribute("href"));
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: -20 });
+    });
+  });
+
+  /* Pin positions depend on text metrics. Webfont swap and late-built
+     placeholders both change section heights, so recompute after each. */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
+  }
+  window.addEventListener("load", () => ScrollTrigger.refresh());
+  setTimeout(() => ScrollTrigger.refresh(), 2700);
+
+  /* nav hairline */
+  ScrollTrigger.create({
+    start: 40, end: 99999,
+    onToggle: (s) => document.getElementById("nav").classList.toggle("is-stuck", s.isActive)
+  });
+
+  /* ── hero: slow reveal on load ── */
+  const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+  heroTl
+    .to(".hero__eyebrow", { opacity: 1, y: 0, duration: 0.9 }, 0.15)
+    .to(".hero__h1", { opacity: 1, y: 0, duration: 1.15 }, 0.3)
+    .to(".hero__sub", { opacity: 1, y: 0, duration: 1 }, 0.55)
+    .to(".hero__cta", { opacity: 1, y: 0, duration: 0.9 }, 0.7)
+    .to(".hero__figure .figure__frame", { clipPath: "inset(0 0 0% 0)", duration: 1.6, ease: "power4.inOut" }, 0.5);
+
+  /* ── entrance reveals ──
+     These start from opacity:0 / clip-path:inset(0 0 100%), so a trigger that
+     never fires leaves content invisible rather than merely un-animated. They
+     ride the same viewport pass as the placeholders instead of ScrollTrigger,
+     whose start positions are resolved against a layout that is still settling
+     (webfont swap, generated placeholders) — on a deep link or a mid-page
+     reload that produced in-view figures clipped to nothing. */
+  function playReveal(el) {
+    if (el.classList.contains("clipfig")) {
+      gsap.to(el.querySelector(".figure__frame"), {
+        clipPath: "inset(0 0 0% 0)", duration: 1.35, ease: "power4.inOut"
+      });
+    } else {
+      gsap.to(el, { opacity: 1, y: 0, duration: 0.95, ease: "power3.out" });
+    }
+  }
+
+  passes.push({
+    items: Array.prototype.filter.call(
+      document.querySelectorAll(".reveal, .clipfig"),
+      (el) => !el.closest(".hero")          // hero is driven by the load timeline
+    ),
+    hit: (r, vh) => r.top < vh * 0.92 && r.bottom > 0,
+    run: playReveal
+  });
+  schedulePass();
+
+  /* Lenis drives scroll through rAF; keep the pass in step with it. */
+  lenis.on("scroll", schedulePass);
+
+  /* ── watchdog ──
+     requestAnimationFrame can be suspended outright when the page is not being
+     composited (background tab, offscreen or headless rendering) — confirmed in
+     testing, where neither rAF nor IntersectionObserver ever fired. That freezes
+     GSAP, so any element still holding its hidden start-state would stay
+     invisible indefinitely. Timers keep running in that state, so a timer sets
+     the final styles directly, bypassing the animation layer entirely.
+     Cosmetic when things work; the difference between a readable page and a
+     blank one when they do not. */
+  const watched = Array.prototype.filter.call(
+    document.querySelectorAll(".reveal, .clipfig"),
+    (el) => !el.closest(".hero")
+  );
+
+  function stillHidden(el) {
+    if (el.classList.contains("clipfig")) {
+      const f = el.querySelector(".figure__frame");
+      return f && getComputedStyle(f).clipPath.indexOf("100%") !== -1;
+    }
+    return parseFloat(getComputedStyle(el).opacity) < 0.99;
+  }
+
+  function forceShow(el) {
+    if (el.classList.contains("clipfig")) {
+      const f = el.querySelector(".figure__frame");
+      if (f) f.style.clipPath = "inset(0 0 0% 0)";
+    } else {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    }
+  }
+
+  const sweep = window.setInterval(function () {
+    const vh = window.innerHeight;
+    let remaining = 0;
+    watched.forEach((el) => {
+      if (!stillHidden(el)) return;
+      remaining++;
+      const r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) forceShow(el);   // in view but still hidden
+    });
+    if (!remaining) window.clearInterval(sweep);
+  }, 1200);
+
+  /* ── parallax at two depths (safe to drive with scrub: offset only) ── */
+  gsap.utils.toArray(".clipfig").forEach((fig) => {
+    if (fig.closest(".hero")) return;
+    const depth = parseFloat(fig.dataset.depth || 0);
+    if (depth) {
+      gsap.fromTo(fig.querySelector("img"),
+        { yPercent: -depth * 100 },
+        { yPercent: depth * 100, ease: "none",
+          scrollTrigger: { trigger: fig, start: "top bottom", end: "bottom top", scrub: true } }
+      );
+    }
+  });
+
+  /* ── problem: word-by-word scrub ── */
+  const splitEl = document.querySelector("[data-split]");
+  if (splitEl) {
+    const words = splitEl.textContent.trim().split(/\s+/);
+    splitEl.textContent = "";
+    words.forEach((w, i) => {
+      const s = document.createElement("span");
+      s.className = "w";
+      s.textContent = w + (i < words.length - 1 ? " " : "");
+      splitEl.appendChild(s);
+    });
+    gsap.to(splitEl.querySelectorAll(".w"), {
+      opacity: 1, stagger: 0.5, ease: "none",
+      scrollTrigger: { trigger: splitEl, start: "top 78%", end: "bottom 55%", scrub: true }
+    });
+  }
+
+  /* ── evidence: numerals count up ── */
+  gsap.utils.toArray("[data-count]").forEach((el) => {
+    const end = parseFloat(el.dataset.count);
+    const o = { v: 0 };
+    gsap.to(o, {
+      v: end, duration: 1.5, ease: "power2.out",
+      scrollTrigger: { trigger: el, start: "top 85%" },
+      onUpdate: () => { el.firstChild.nodeValue = String(Math.round(o.v)); }
+    });
+  });
+
+  /* ── pinned sections (desktop only) ── */
+  const mm = gsap.matchMedia();
+
+  mm.add("(min-width: 900px)", () => {
+    /* mechanism: four panels advance on scroll */
+    const stage = document.querySelector("[data-mech]");
+    const sec = document.getElementById("mechanism");
+    sec.classList.add("is-pinned");
+    const panels = stage.querySelectorAll(".mech__panel");
+    const figs = stage.querySelectorAll(".mech__figs .figure");
+    const ticks = sec.querySelectorAll(".mech__tick");
+
+    gsap.set(panels, { opacity: 0, y: 26 });
+    gsap.set(figs, { opacity: 0, scale: 1.03 });
+    gsap.set([panels[0], figs[0]], { opacity: 1, y: 0, scale: 1 });
+
+    let cur = 0;
+    const go = (i) => {
+      if (i === cur) return;
+      gsap.to(panels[cur], { opacity: 0, y: -22, duration: 0.45, ease: "power2.in" });
+      gsap.to(figs[cur], { opacity: 0, scale: 1.02, duration: 0.5, ease: "power2.in" });
+      gsap.fromTo(panels[i], { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: 0.08 });
+      gsap.fromTo(figs[i], { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.75, ease: "power3.out", delay: 0.05 });
+      ticks[cur].classList.remove("is-on"); ticks[cur].setAttribute("aria-selected", "false");
+      ticks[i].classList.add("is-on"); ticks[i].setAttribute("aria-selected", "true");
+      cur = i;
+    };
+
+    const mst = ScrollTrigger.create({
+      trigger: sec, start: "top top", end: "+=340%",
+      pin: stage, pinSpacing: true, scrub: true,
+      onUpdate: (self) => go(Math.min(3, Math.floor(self.progress * 3.999)))
+    });
+
+    ticks.forEach((t, i) => {
+      t.addEventListener("click", () => {
+        const p = (i + 0.5) / 4;
+        lenis.scrollTo(mst.start + (mst.end - mst.start) * p);
+      });
+    });
+
+    /* clinician voices: one quote per view */
+    const vox = document.querySelector("[data-vox]");
+    const vsec = document.getElementById("voices");
+    vsec.classList.add("is-pinned-vox");
+    const qs = vox.querySelectorAll(".vox__q");
+    const dots = vox.querySelectorAll(".vox__dot");
+    gsap.set(qs, { opacity: 0, x: 22 });
+    gsap.set(qs[0], { opacity: 1, x: 0 });
+    let vcur = 0;
+    const vgo = (i) => {
+      if (i === vcur) return;
+      gsap.to(qs[vcur], { opacity: 0, x: -22, duration: 0.5, ease: "power2.in" });
+      gsap.fromTo(qs[i], { opacity: 0, x: 22 }, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out", delay: 0.1 });
+      dots[vcur].classList.remove("is-on");
+      dots[i].classList.add("is-on");
+      vcur = i;
+    };
+    ScrollTrigger.create({
+      trigger: vsec, start: "top top", end: "+=260%",
+      pin: vox.closest(".sec__grid"), pinSpacing: true, scrub: true,
+      onUpdate: (self) => vgo(Math.min(2, Math.floor(self.progress * 2.999)))
+    });
+
+    return () => {
+      sec.classList.remove("is-pinned");
+      vsec.classList.remove("is-pinned-vox");
+      gsap.set([panels, figs, qs], { clearProps: "all" });
+    };
+  });
+
+  /* ══════════════  signature chart (shared with static path)  ══════════════ */
+  window.__setSig = setSig;
+
+  ScrollTrigger.create({
+    trigger: "#signature", start: "top top", end: "+=320%",
+    pin: "[data-sig]", pinSpacing: true, scrub: true,
+    onUpdate: (self) => setSig(self.progress),
+    onRefresh: () => setSig(0)
+  });
+  setSig(0);
+
+  /* ══════════════  helpers shared by both paths  ══════════════ */
+
+  // the trajectory the movement requires, 0..1 across the gesture
+  function required(t) {
+    return 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, t / 0.72)) * (t < 0.72 ? 1 : 1);
+  }
+  // what the patient contributes on their own — dips through mid-reach
+  function effort(t) {
+    const r = required(t);
+    const fatigue = Math.exp(-Math.pow((t - 0.38) / 0.17, 2)) * 0.62;
+    return Math.max(0, r * (1 - fatigue));
+  }
+
+  function drawChart(p) {
+    const svg = document.querySelector(".sig__chart");
+    if (!svg) return;
+    const W = 420, H = 190, TOP = 20, BOT = 170;
+    const y = (v) => BOT - v * (BOT - TOP);
+    const N = 90;
+    let reqD = "", effD = "", top = "", bottom = "";
+    for (let i = 0; i <= N; i++) {
+      const t = i / N, x = t * W;
+      const r = required(t), e = effort(t);
+      reqD += (i ? "L" : "M") + x.toFixed(1) + " " + y(r).toFixed(1);
+      effD += (i ? "L" : "M") + x.toFixed(1) + " " + y(e).toFixed(1);
+      top += (i ? "L" : "M") + x.toFixed(1) + " " + y(r).toFixed(1);
+    }
+    for (let i = N; i >= 0; i--) {
+      const t = i / N, x = t * W;
+      bottom += "L" + x.toFixed(1) + " " + y(effort(t)).toFixed(1);
+    }
+    svg.querySelector('[data-p="req"]').setAttribute("d", reqD);
+    svg.querySelector('[data-p="eff"]').setAttribute("d", effD);
+    svg.querySelector('[data-p="assist"]').setAttribute("d", top + bottom + "Z");
+    svg.querySelector("[data-clip]").setAttribute("width", String(p * W));
+    const ph = svg.querySelector("[data-playhead]");
+    ph.setAttribute("x1", String(p * W));
+    ph.setAttribute("x2", String(p * W));
+    ph.setAttribute("opacity", p > 0.004 && p < 0.996 ? "0.75" : "0");
+  }
+
+  function setSig(p) {
+    drawChart(p);
+    const r = required(p), e = effort(p);
+    const assist = Math.max(0, r - e);
+    const denom = r > 0.001 ? r : 1;
+    const aPct = Math.round((assist / denom) * 100);
+    const roE = document.querySelector('[data-ro="effort"]');
+    const roA = document.querySelector('[data-ro="assist"]');
+    const roP = document.querySelector('[data-ro="phase"]');
+    if (roE) roE.textContent = String(100 - aPct);
+    if (roA) roA.textContent = String(aPct);
+    if (roP) roP.textContent = p < 0.52 ? "REACH" : p < 0.78 ? "GRASP" : "RELEASE";
+    if (window.__sigPose) window.__sigPose(p, assist / denom);
+  }
+})();
+</script>
+
+<!-- ─────────────  signature: Three.js  ───────────── -->
+<script type="module">
+import * as THREE from "three";
+
+(function () {
+  "use strict";
+  const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (REDUCE || typeof window.gsap === "undefined") return;
+
+  const wrap = document.querySelector("[data-sigcanvas]");
+  if (!wrap) return;
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" });
+  } catch (e) { return; }                       // no WebGL → static fallback stays
+  if (!renderer.getContext()) return;
+
+  wrap.querySelector("[data-sigstatic]").remove();
+  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  wrap.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 4 / 3, 0.1, 40);
+  camera.position.set(1.42, 0.42, 1.72);
+  camera.lookAt(0, -0.05, 0);
+
+  scene.add(new THREE.HemisphereLight(0xdfe7ea, 0x14181b, 1.5));
+  const key = new THREE.DirectionalLight(0xfff6ea, 2.1);
+  key.position.set(2.2, 2.6, 1.8);
+  scene.add(key);
+  const rim = new THREE.DirectionalLight(0x58aec4, 1.0);
+  rim.position.set(-2.0, 0.4, -1.6);
+  scene.add(rim);
+
+  const M = {
+    limb:   new THREE.MeshStandardMaterial({ color: 0xcfc3b8, roughness: 0.92, metalness: 0.0 }),
+    shell:  new THREE.MeshStandardMaterial({ color: 0xeae6df, roughness: 0.45, metalness: 0.06 }),
+    metal:  new THREE.MeshStandardMaterial({ color: 0x9aa1a7, roughness: 0.3,  metalness: 0.92 }),
+    dark:   new THREE.MeshStandardMaterial({ color: 0x2a2f33, roughness: 0.6,  metalness: 0.3 }),
+    accent: new THREE.MeshStandardMaterial({ color: 0x0a5c73, roughness: 0.4, metalness: 0.2, emissive: 0x58aec4, emissiveIntensity: 0 })
+  };
+
+  const rig = new THREE.Group();
+  rig.rotation.y = -0.42;
+  scene.add(rig);
+
+  // upper arm, fixed
+  const upper = new THREE.Group();
+  rig.add(upper);
+  const upperMesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.085, 0.4, 6, 16), M.limb);
+  upperMesh.position.y = -0.2; upperMesh.rotation.z = Math.PI / 2;
+  upperMesh.position.x = -0.2; upperMesh.position.y = 0.16;
+  upper.add(upperMesh);
+
+  // elbow → forearm
+  const elbow = new THREE.Group();
+  elbow.position.set(0.0, 0.16, 0);
+  upper.add(elbow);
+
+  const foreMesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.072, 0.34, 6, 16), M.limb);
+  foreMesh.rotation.z = Math.PI / 2; foreMesh.position.x = 0.2;
+  elbow.add(foreMesh);
+
+  // cuff: two half shells around the forearm
+  [-1, 1].forEach((s) => {
+    const half = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.095, 0.088, 0.2, 20, 1, true, 0, Math.PI * 0.92),
+      M.shell
+    );
+    half.rotation.z = Math.PI / 2;
+    half.rotation.x = s > 0 ? 0 : Math.PI;
+    half.position.x = 0.17;
+    elbow.add(half);
+  });
+  const cuffBand = new THREE.Mesh(new THREE.TorusGeometry(0.096, 0.008, 8, 28), M.dark);
+  cuffBand.rotation.y = Math.PI / 2; cuffBand.position.x = 0.075;
+  elbow.add(cuffBand);
+
+  // actuator housing + accent collar (the assist indicator)
+  const housing = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.11, 22), M.metal);
+  housing.rotation.x = Math.PI / 2; housing.position.set(0.075, 0.085, 0.055);
+  elbow.add(housing);
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.058, 0.011, 10, 26), M.accent);
+  collar.rotation.y = 0; collar.position.set(0.075, 0.085, 0.112);
+  elbow.add(collar);
+
+  // linkage bar: follows the limb with a lag
+  const linkPivot = new THREE.Group();
+  linkPivot.position.set(0.075, 0.085, 0.055);
+  elbow.add(linkPivot);
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.3, 10), M.metal);
+  bar.rotation.z = Math.PI / 2; bar.position.x = 0.15;
+  linkPivot.add(bar);
+  const barEnd = new THREE.Mesh(new THREE.SphereGeometry(0.019, 14, 12), M.dark);
+  barEnd.position.x = 0.3;
+  linkPivot.add(barEnd);
+
+  // wrist → hand
+  const wrist = new THREE.Group();
+  wrist.position.set(0.38, 0, 0);
+  elbow.add(wrist);
+  const palm = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.042), M.limb);
+  palm.position.x = 0.05;
+  wrist.add(palm);
+
+  const fingers = [];
+  for (let i = 0; i < 4; i++) {
+    const base = new THREE.Group();
+    base.position.set(0.1, 0.037 - i * 0.026, 0);
+    wrist.add(base);
+    const p1 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.019, 0.019), M.limb);
+    p1.position.x = 0.025;
+    base.add(p1);
+    const mid = new THREE.Group();
+    mid.position.x = 0.05;
+    base.add(mid);
+    const p2 = new THREE.Mesh(new THREE.BoxGeometry(0.042, 0.017, 0.017), M.limb);
+    p2.position.x = 0.021;
+    mid.add(p2);
+    fingers.push({ base: base, mid: mid });
+  }
+  const thumbBase = new THREE.Group();
+  thumbBase.position.set(0.055, 0.03, 0.028);
+  thumbBase.rotation.z = -0.7;
+  wrist.add(thumbBase);
+  const thumb = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.021, 0.021), M.limb);
+  thumb.position.x = 0.024;
+  thumbBase.add(thumb);
+
+  // contact shadow
+  const shadowTex = (function () {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const g = c.getContext("2d");
+    const rg = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    rg.addColorStop(0, "rgba(0,0,0,0.5)");
+    rg.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = rg; g.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  })();
+  const shadow = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.35, 0.8),
+    new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false })
+  );
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.set(0.12, -0.3, 0.02);
+  scene.add(shadow);
+
+  /* pose: the limb leads, the linkage follows */
+  let lastAssist = 0;
+  function pose(p, assistRatio) {
+    const reach = Math.min(1, p / 0.72);
+    const ease = 0.5 - 0.5 * Math.cos(Math.PI * reach);
+
+    elbow.rotation.z = -1.15 + ease * 1.1;          // extend
+    upper.rotation.z = -0.06 + ease * 0.2;
+    wrist.rotation.z = -0.18 + ease * 0.34;
+
+    // linkage trails the limb by a few degrees — it responds, it does not lead
+    linkPivot.rotation.z = -0.12 * (1 - ease) - assistRatio * 0.16;
+
+    // grasp
+    const grasp = p < 0.5 ? 0 : Math.min(1, (p - 0.5) / 0.26);
+    const release = p < 0.82 ? 0 : Math.min(1, (p - 0.82) / 0.18);
+    const curl = Math.max(0, grasp - release);
+    fingers.forEach((f, i) => {
+      const k = curl * (1 + i * 0.04);
+      f.base.rotation.z = -k * 0.95;
+      f.mid.rotation.z = -k * 1.15;
+    });
+    thumbBase.rotation.z = -0.7 - curl * 0.55;
+
+    // accent collar reports the assist fraction
+    lastAssist += (assistRatio - lastAssist) * 0.35;
+    M.accent.emissiveIntensity = lastAssist * 2.6;
+    collar.scale.setScalar(1 + lastAssist * 0.1);
+
+    render();
+  }
+
+  function resize() {
+    const r = wrap.getBoundingClientRect();
+    if (!r.width) return;
+    renderer.setSize(r.width, r.height, false);
+    camera.aspect = r.width / r.height;
+    camera.updateProjectionMatrix();
+    render();
+  }
+  function render() { renderer.render(scene, camera); }
+
+  window.__sigPose = pose;
+  new ResizeObserver(resize).observe(wrap);
+  resize();
+  pose(0, 0);
+  if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+
+  /* ══════════════  gallery hover: WebGL ripple  ══════════════
+     One renderer, created on first hover, on fine pointers only. Renders while
+     hovering and for the decay after, then stops. */
+  if (!window.matchMedia("(hover:hover) and (pointer:fine)").matches) return;
+
+  let hv = null;
+  function initHover() {
+    const r2 = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    r2.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+    const cv = r2.domElement;
+    Object.assign(cv.style, { position: "fixed", inset: "0 auto auto 0", pointerEvents: "none", zIndex: 5, opacity: "0" });
+    document.body.appendChild(cv);
+
+    const sc = new THREE.Scene();
+    const cam = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0, 10);
+    cam.position.z = 1;
+    const uni = {
+      uTex: { value: null },
+      uCover: { value: new THREE.Vector2(1, 1) },
+      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uTime: { value: 0 },
+      uHover: { value: 0 }
+    };
+    const quad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.ShaderMaterial({
+      uniforms: uni,
+      vertexShader: "varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy*2.0,0.0,1.0); }",
+      fragmentShader: [
+        "precision mediump float;",
+        "uniform sampler2D uTex; uniform vec2 uCover; uniform vec2 uMouse;",
+        "uniform float uTime; uniform float uHover; varying vec2 vUv;",
+        "void main(){",
+        "  vec2 d = vUv - uMouse;",
+        "  float dist = length(d);",
+        "  float ring = sin(dist*24.0 - uTime*2.0) * exp(-dist*5.5);",
+        "  vec2 off = normalize(d + 1e-5) * ring * 0.014 * uHover;",
+        "  vec2 uv = (vUv - 0.5) * uCover + 0.5 + off;",
+        "  uv = clamp(uv, 0.001, 0.999);",
+        "  vec3 c = texture2D(uTex, uv).rgb;",
+        "  float rr = texture2D(uTex, clamp(uv + off*1.4, 0.001, 0.999)).r;",
+        "  c.r = mix(c.r, rr, 0.55*uHover);",
+        "  gl_FragColor = vec4(c, 1.0);",
+        "}"
+      ].join("\n")
+    }));
+    sc.add(quad);
+
+    let raf = 0, active = null, target = 0, t0 = performance.now();
+    const loader = new THREE.TextureLoader();
+    const cache = new Map();
+
+    function frame() {
+      const now = performance.now();
+      uni.uTime.value = (now - t0) / 1000;
+      uni.uHover.value += (target - uni.uHover.value) * 0.09;
+      if (active) {
+        const b = active.getBoundingClientRect();
+        cv.style.transform = "translate(" + b.left + "px," + b.top + "px)";
+        r2.setSize(b.width, b.height, false);
+        cv.style.width = b.width + "px";
+        cv.style.height = b.height + "px";
+        r2.render(sc, cam);
+      }
+      cv.style.opacity = String(Math.min(1, uni.uHover.value * 1.6));
+      if (uni.uHover.value > 0.002 || target > 0) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        raf = 0; active = null; cv.style.opacity = "0";
+      }
+    }
+
+    return {
+      enter(frameEl, img) {
+        let tex = cache.get(img.src);
+        if (!tex) {
+          tex = loader.load(img.src, () => { if (raf) return; });
+          tex.colorSpace = THREE.SRGBColorSpace;
+          cache.set(img.src, tex);
+        }
+        uni.uTex.value = tex;
+        const b = frameEl.getBoundingClientRect();
+        const iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+        const ap = b.width / b.height, at = iw / ih;
+        uni.uCover.value.set(at > ap ? ap / at : 1, at > ap ? 1 : at / ap);
+        active = frameEl; target = 1; t0 = performance.now();
+        if (!raf) raf = requestAnimationFrame(frame);
+      },
+      move(frameEl, e) {
+        const b = frameEl.getBoundingClientRect();
+        uni.uMouse.value.set((e.clientX - b.left) / b.width, 1 - (e.clientY - b.top) / b.height);
+      },
+      leave() { target = 0; }
+    };
+  }
+
+  document.querySelectorAll("[data-gal] .figure").forEach((fig) => {
+    const frameEl = fig.querySelector(".figure__frame");
+    const img = fig.querySelector("img");
+    frameEl.addEventListener("pointerenter", (e) => {
+      if (!hv) hv = initHover();
+      if (!hv) return;
+      hv.enter(frameEl, img);
+      hv.move(frameEl, e);
+    });
+    frameEl.addEventListener("pointermove", (e) => { if (hv) hv.move(frameEl, e); });
+    frameEl.addEventListener("pointerleave", () => { if (hv) hv.leave(); });
+  });
+})();
+</script>
+</body>
+</html>
