@@ -1,28 +1,37 @@
-import ContactForm from "@/components/ContactForm";
-import { createClient } from "@/prismicio";
-import { Metadata } from "next";
+import { Metadata } from "next"
+import { cookies } from "next/headers"
+import ContactContent from "./ContactContent"
 
-export const generateMetadata = async (): Promise<Metadata> => {
-  const client = createClient();
-  const page = await client.getSingle("contact_page");
-
-  return {
-    title: page.data.meta_title || "Contact Us",
-    description: page.data.meta_description || "Get in touch with us.",
+const META: Record<"en" | "fr", Metadata> = {
+  en: {
+    title: "ExoFlex — Contact us",
+    description:
+      "Request a clinical demonstration of ExoFlex, or get in touch about clinical partnership, investment or general enquiries.",
     openGraph: {
-      title: page.data.meta_title || "Contact Us",
-      description: page.data.meta_description || "Get in touch with us.",
-      images: page.data.meta_image?.url ? [{ url: page.data.meta_image.url }] : [],
-    }
-  };
-};
+      title: "ExoFlex — Contact us",
+      description:
+        "Request a clinical demonstration of ExoFlex, or get in touch about clinical partnership, investment or general enquiries.",
+      images: [{ url: "/images/meta.jpg" }],
+    },
+  },
+  fr: {
+    title: "ExoFlex — Nous joindre",
+    description:
+      "Demandez une démonstration clinique d'ExoFlex, ou écrivez-nous pour un partenariat clinique, un investissement ou une demande générale.",
+    openGraph: {
+      title: "ExoFlex — Nous joindre",
+      description:
+        "Demandez une démonstration clinique d'ExoFlex, ou écrivez-nous pour un partenariat clinique, un investissement ou une demande générale.",
+      images: [{ url: "/images/meta.jpg" }],
+    },
+  },
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = (await cookies()).get("lang")?.value === "en" ? "en" : "fr"
+  return META[lang]
+}
+
 export default function ContactPage() {
-  return (
-    <main className="mx-auto z-10 max-w-3xl px-4 py-6 pt-30">
-      <h1 className="mb-12 text-center text-5xl font-extrabold text-white">
-        Contact&nbsp;us
-      </h1>
-      <ContactForm />
-    </main>
-  );
+  return <ContactContent />
 }
