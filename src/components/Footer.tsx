@@ -129,13 +129,17 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t.emailPlaceholder}
-                  className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm text-ink outline-none placeholder:text-slate"
+                  /* text-base below md: at text-sm iOS Safari zooms the page
+                     into any focused field under 16px, and the visitor has to
+                     pinch back out after subscribing. */
+                  className="min-w-0 flex-1 bg-transparent px-4 py-2 text-base text-ink outline-none placeholder:text-slate md:text-sm"
                 />
                 <button
                   type="submit"
                   disabled={status === "sending" || status === "ok"}
                   className={cn(
                     "shrink-0 rounded-full bg-ink px-4 py-2 text-sm font-medium text-on-ink",
+                    "min-h-11 md:min-h-0",
                     "transition-colors duration-200 hover:bg-accent-ink",
                     "disabled:cursor-not-allowed disabled:opacity-60"
                   )}

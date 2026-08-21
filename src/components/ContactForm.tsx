@@ -117,9 +117,15 @@ export default function ContactForm() {
       {/* One selector rather than three competing buttons. */}
       <fieldset className="border-0 p-0">
         <legend className="label mb-4 p-0">{t.legend}</legend>
-        <div className="flex flex-wrap gap-x-8 gap-y-3">
+        <div className="flex flex-wrap gap-x-8 gap-y-1">
+          {/* min-h-11: the visible control is an underlined line of text, so
+              the label carries the 44px touch target the text alone lacks.
+              Utilities rather than .label/.label--plain: these are the form's
+              primary choice and the cap size bottoms out below 12px on
+              phones — and .label is unlayered CSS, so it silently outranks
+              every utility next to it (text-sm, the checked/hover colours). */}
           {INTERESTS.map((i) => (
-            <label key={i.value} className="group cursor-pointer">
+            <label key={i.value} className="group inline-flex min-h-11 cursor-pointer items-center">
               <input
                 type="radio"
                 name="interest"
@@ -130,7 +136,7 @@ export default function ContactForm() {
               />
               <span
                 className={cn(
-                  "label label--plain border-b border-transparent pb-1 transition-colors",
+                  "text-sm text-slate border-b border-transparent pb-1 transition-colors",
                   "group-hover:text-ink",
                   "peer-checked:border-accent-ink peer-checked:text-ink",
                   "peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4"

@@ -209,6 +209,16 @@ const COPY = {
   fr: { label: "Jalons", heading: "Le chemin parcouru." },
 } as const
 
+/* One scrim for both render paths. Heavier low stops below md: the portrait
+   crop centres the frame's brightest area and the caption stack reaches
+   mid-screen, so at via-black/30 the label and heading sat on white shirts
+   and pale stairs (Centech scene) at well under AA. Desktop keeps the
+   lighter tuning — its caption sits low-left, over the frame's darker
+   ground. */
+const SCRIM =
+  "absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/25 " +
+  "md:from-black/75 md:via-black/30"
+
 function SceneMedia({ scene, first }: { scene: Scene; first: boolean }) {
   if (scene.media.type === "collage") {
     /* the Floema device: photographs scattered around the statement, each
@@ -455,10 +465,7 @@ const Timeline: FC = () => {
                 <SceneMedia scene={s} first={i === 0} />
               </div>
               {s.tone !== "light" && (
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/25"
-                />
+                <div aria-hidden="true" className={SCRIM} />
               )}
               <div className="relative flex min-h-[72svh] items-end px-4 pb-12 pt-24 md:px-6">
                 <div className="mx-auto w-full max-w-screen-2xl">
@@ -477,12 +484,7 @@ const Timeline: FC = () => {
               <div key={i} data-scene className="absolute inset-0 will-change-transform">
                 <SceneMedia scene={s} first={i === 0} />
                 {/* scrim lives inside the frame so pale scenes can skip it */}
-                {s.tone !== "light" && (
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/25"
-                  />
-                )}
+                {s.tone !== "light" && <div aria-hidden="true" className={SCRIM} />}
               </div>
             ))}
 

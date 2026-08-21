@@ -196,6 +196,17 @@ body {
   border-radius: 3px;
 }
 
+/* Taps commit immediately: without this iOS Safari waits ~350ms on every tap
+   to rule out a double-tap zoom. Pinch zoom is untouched. */
+a,
+button,
+input,
+textarea,
+select,
+label {
+  touch-action: manipulation;
+}
+
 .skip-link {
   position: absolute;
   left: 0.5rem;

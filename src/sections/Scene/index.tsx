@@ -103,7 +103,15 @@ const Scene: FC = () => {
           poster="/images/product/device-orbit-poster.jpg"
           alt={t.alt}
           className="absolute inset-0 overflow-hidden"
-          videoClassName="h-full w-full object-cover"
+          /* contain below lg: the clip is 1280×720, so covering a portrait
+             phone showed the central quarter of the frame — straps filling the
+             screen, unreadable as a device. Contained, the whole machine is on
+             screen and the letterbox disappears into the band's own ground
+             (the footage's studio is a near match for #363639). Positioned at
+             35% so the strip sits in the air above the copy, not behind it.
+             Cover returns at lg, where the band is wide enough to hold the
+             full device. */
+          videoClassName="h-full w-full object-contain [object-position:50%_35%] lg:object-cover lg:object-center"
         />
       </div>
 

@@ -183,8 +183,12 @@ export default function Evidence() {
              rules painted over the trace and chopped it into segments at every
              crossing. The trace has to read as one continuous signal passing in
              front of the structure. Harmless over the text — it is a hairline
-             in a 64px band of empty air, and pointer-events-none. */
-          className="pointer-events-none absolute inset-x-0 top-[58%] z-10 h-16 w-full -translate-y-1/2"
+             in a 64px band of empty air, and pointer-events-none.
+             lg only: the band of empty air it rides through exists in the
+             four-column composition alone. Below lg the tiles stack and 58%
+             lands inside a label, where the casing stroke erased the letters
+             it crossed. */
+          className="pointer-events-none absolute inset-x-0 top-[58%] z-10 hidden h-16 w-full -translate-y-1/2 lg:block"
         >
           {/* The casing, in the section's own ground colour. Stacking order was
               not enough on its own: the trace is 9% white and the column rules
