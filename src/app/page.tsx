@@ -50,6 +50,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Index() {
   return (
     <main>
+      {/* The canvas — what Safari paints behind the status bar and in the
+          rubber-band bounce — is html's background, paper by default. This
+          page is charcoal at both edges (hero on top, film footer below), so
+          the exposed canvas read as a beige bar on iOS. Scoped here: the
+          other routes open on paper and are right already. */}
+      <style>{`html{background:#363639}`}</style>
       <Hero />
       {/* Higher stacking context + opaque backgrounds: this block is what
           slides over the pinned hero. */}

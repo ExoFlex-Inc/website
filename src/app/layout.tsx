@@ -71,7 +71,12 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} className={`${tomatoGrotesk.variable} scroll-smooth`}>
-      <body className="relative min-h-screen max-w-full overflow-x-hidden bg-paper text-ink">
+      {/* overflow-x-CLIP, not -hidden: hidden makes body a scroll container,
+          and iOS Safari then leaves a persistent band of exposed canvas above
+          the document when its toolbar collapses or expands mid-scroll — the
+          beige bar over the dark hero on phones. clip clips the same overflow
+          without the scroll-container semantics. */}
+      <body className="relative min-h-screen max-w-full overflow-x-clip bg-paper text-ink">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSONLD) }}
