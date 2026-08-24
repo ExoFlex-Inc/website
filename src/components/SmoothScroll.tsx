@@ -8,6 +8,12 @@ import { useReducedMotion } from "@/hooks/useReducedMotion"
 
 gsap.registerPlugin(ScrollTrigger)
 
+/* iOS Safari fires resize as its toolbar collapses and expands on every
+   scroll; each one made every trigger re-measure mid-flight against a
+   viewport that was about to change back. Skip those — real rotations and
+   window resizes still refresh. */
+ScrollTrigger.config({ ignoreMobileResize: true })
+
 /**
  * Lenis smooth scrolling, synced to GSAP's ticker so every ScrollTrigger on
  * the page scrubs against the eased position instead of raw wheel events.

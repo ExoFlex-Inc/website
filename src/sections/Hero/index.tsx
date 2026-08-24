@@ -102,30 +102,42 @@ const Hero: React.FC = () => {
          of travel, and the next section — which sits at a higher z-index with
          its own background — slides up over it. pinSpacing: false is what
          makes the following content overlap instead of waiting below.
-         Skipped under reduced motion; the page then flows normally. */
-      ScrollTrigger.create({
-        trigger: rootRef.current,
-        start: "bottom bottom",
-        end: "+=90%",
-        pin: true,
-        pinSpacing: false,
-        anticipatePin: 1,
-      })
+         Skipped under reduced motion; the page then flows normally.
 
-      /* recede slightly as the cover passes, so the slide reads as depth.
-         Tweens the INNER wrapper, never the pinned element itself — a
-         transform on the pin target fights ScrollTrigger's own pin transform
-         and snaps mid-scroll. */
-      gsap.to("[data-hero-inner]", {
-        scale: 0.98,
-        opacity: 0.72,
-        ease: "none",
-        scrollTrigger: {
+         Desktop-only, and this is the fix for the beige bar on phones: the
+         pin renders the hero position:fixed, and iOS Safari resizes the
+         viewport as its toolbar collapses and expands — a pin measured
+         against one viewport paints offset in the other, exposing the paper
+         ground above the hero (~the toolbar delta, 50-90px). No transform or
+         canvas colour fixes that, so below lg the hero simply scrolls, same
+         as under reduced motion. matchMedia rather than a one-shot check so
+         an iPad crossing 1024px on rotation gets the right behaviour. */
+      const mm = gsap.matchMedia()
+      mm.add("(min-width: 1024px)", () => {
+        ScrollTrigger.create({
           trigger: rootRef.current,
           start: "bottom bottom",
           end: "+=90%",
-          scrub: true,
-        },
+          pin: true,
+          pinSpacing: false,
+          anticipatePin: 1,
+        })
+
+        /* recede slightly as the cover passes, so the slide reads as depth.
+           Tweens the INNER wrapper, never the pinned element itself — a
+           transform on the pin target fights ScrollTrigger's own pin
+           transform and snaps mid-scroll. */
+        gsap.to("[data-hero-inner]", {
+          scale: 0.98,
+          opacity: 0.72,
+          ease: "none",
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: "bottom bottom",
+            end: "+=90%",
+            scrub: true,
+          },
+        })
       })
     },
     { scope: rootRef, dependencies: [reduced], revertOnUpdate: true }
