@@ -1,13 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SiLinkedin, SiFacebook } from "react-icons/si";
-import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
-
-type Status = "idle" | "sending" | "ok" | "error";
 
 /* Each language links to its own legal pages — they exist as separate
    routes in both languages. */
@@ -24,16 +20,6 @@ const LEGAL = {
 
 const COPY = {
   en: {
-    stayInformed: "Stay informed",
-    /* Neutral, and localised: the list is read by clinicians, but also by
-       people living with an impairment, families, funders and researchers,
-       and the old "you@clinic.ca" told everyone else the form was not
-       for them. */
-    emailPlaceholder: "you@example.ca",
-    subscribe: "Subscribe",
-    thanks: "Thank you",
-    onList: "You are on the list.",
-    sendFailed: "That did not go through. Please try again or email us directly.",
     contact: "Contact",
     emailSr: "Email",
     basedIn: "Based in",
@@ -45,12 +31,6 @@ const COPY = {
     rights: "All rights reserved.",
   },
   fr: {
-    stayInformed: "Restez informés",
-    emailPlaceholder: "vous@exemple.ca",
-    subscribe: "S'abonner",
-    thanks: "Merci",
-    onList: "Vous êtes sur la liste.",
-    sendFailed: "L'envoi a échoué. Réessayez ou écrivez-nous directement.",
     contact: "Contact",
     emailSr: "Courriel",
     basedIn: "Établis à",
@@ -64,50 +44,23 @@ const COPY = {
 } as const;
 
 /**
- * Footer.
+ * Footer. No entrance animation — a footer does not need to be revealed.
  *
- * The old revision animated itself in on every route change and swallowed
- * newsletter failures into `console.error`, so a visitor whose submission
- * failed saw nothing at all. This one reports outcome in a live region and
- * drops the entrance animation — a footer does not need to be revealed.
+ * The newsletter signup that lived beside the logo was removed 2026-08-24 at
+ * the owner's request; /api/contact serves the contact form alone now. If a
+ * list ever comes back, restore the form from history rather than a raw
+ * provider call — the HubSpot-from-the-browser version failed silently on
+ * every visitor.
  */
 export default function Footer() {
   const { lang } = useLang();
   const t = COPY[lang];
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<Status>("idle");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email) return;
-    setStatus("sending");
-
-    try {
-      /* Through our own route, not straight to a provider from the browser:
-         this used to POST to HubSpot client-side, which put the portal and form
-         IDs in the bundle and, once that portal stopped accepting submissions,
-         failed on every visitor with nothing on the server to show it. */
-      const rsp = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind: "subscribe", email }),
-      });
-      if (!rsp.ok) throw new Error(String(rsp.status));
-      setStatus("ok");
-      setEmail("");
-      setTimeout(() => setStatus("idle"), 5000);
-    } catch (err) {
-      console.error("[newsletter] submission failed:", err);
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 6000);
-    }
-  };
 
   return (
     <footer className="tone-film border-t border-hair px-4 pb-10 pt-[clamp(3.5rem,8vh,6rem)] md:px-6">
       <div className="mx-auto max-w-screen-2xl">
         <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)]">
-          {/* brand + newsletter */}
+          {/* brand */}
           <div>
             <Image
               src="/images/logo.png"
@@ -116,41 +69,6 @@ export default function Footer() {
               height={40}
               className="h-9 w-auto"
             />
-
-            <form onSubmit={handleSubmit} className="mt-8 max-w-sm">
-              <label htmlFor="newsletter-email" className="label block">
-                {t.stayInformed}
-              </label>
-              <div className="mt-3 flex items-center gap-2 rounded-full border border-hair-strong bg-raised p-1 focus-within:border-accent-ink">
-                <input
-                  id="newsletter-email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t.emailPlaceholder}
-                  /* text-base below md: at text-sm iOS Safari zooms the page
-                     into any focused field under 16px, and the visitor has to
-                     pinch back out after subscribing. */
-                  className="min-w-0 flex-1 bg-transparent px-4 py-2 text-base text-ink outline-none placeholder:text-slate md:text-sm"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "sending" || status === "ok"}
-                  className={cn(
-                    "shrink-0 rounded-full bg-ink px-4 py-2 text-sm font-medium text-on-ink",
-                    "min-h-11 md:min-h-0",
-                    "transition-colors duration-200 hover:bg-accent-ink",
-                    "disabled:cursor-not-allowed disabled:opacity-60"
-                  )}
-                >
-                  {status === "sending" ? "…" : status === "ok" ? t.thanks : t.subscribe}
-                </button>
-              </div>
-              <p className="label label--plain mt-2 min-h-5 text-slate" role="status" aria-live="polite">
-                {status === "error" ? t.sendFailed : status === "ok" ? t.onList : ""}
-              </p>
-            </form>
 
             <div className="mt-8 flex items-center gap-2">
               <a

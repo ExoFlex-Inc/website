@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
+import { getLenis } from "@/lib/lenis"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -60,7 +61,24 @@ export default function PageTransition() {
       gsap
         .timeline({
           defaults: { duration: 0.5 },
-          onComplete: () => router.push(url.pathname + url.search),
+          onComplete: () => {
+            /* To the top BEFORE the push, while the dim layer covers the
+               swap. The incoming page's ScrollTriggers are created during
+               React's commit, which runs at whatever scroll position the
+               OLD page left — arrive from the bottom of a long page and
+               every once:true trigger whose start is above that offset
+               fires and kills itself while another trigger's init is still
+               iterating the trigger list, which is the "Application error"
+               (reading 'pin' / 'end' inside ScrollTrigger.refresh) on
+               team → home. Next scrolls to top itself, but only after the
+               commit — too late. Through Lenis, not window.scrollTo: a raw
+               scroll lasts one frame before Lenis's raf writes its own
+               remembered position back. */
+            const lenis = getLenis()
+            if (lenis) lenis.scrollTo(0, { immediate: true, force: true })
+            else window.scrollTo(0, 0)
+            router.push(url.pathname + url.search)
+          },
         })
         .to(dimRef.current, { autoAlpha: 1, ease: "power2.out" }, 0)
         .to(main, { y: 80, ease: "power2.in" }, 0)
@@ -68,6 +86,25 @@ export default function PageTransition() {
     document.addEventListener("click", onClick, true)
     return () => document.removeEventListener("click", onClick, true)
   }, [reduced, router])
+
+  /* Back/forward take the same protection as pushes, for the same reason:
+     the browser hands the App Router a popstate while the page still sits at
+     the OLD route's scroll offset, the new tree's ScrollTriggers get created
+     against it, and deep offsets crash refresh (see onComplete above).
+     Trade-off, measured: back now lands at the top of the previous page —
+     with Lenis in the loop the router's own post-commit restoration does not
+     survive. Accepted: a story-scroll page restarting from its top beats an
+     "Application error" screen. Runs under reduced motion too — the crash
+     has nothing to do with animation. */
+  useEffect(() => {
+    const onPop = () => {
+      const lenis = getLenis()
+      if (lenis) lenis.scrollTo(0, { immediate: true, force: true })
+      else window.scrollTo(0, 0)
+    }
+    window.addEventListener("popstate", onPop)
+    return () => window.removeEventListener("popstate", onPop)
+  }, [])
 
   /* enter: the new page rises from the bottom over the dark ground */
   useEffect(() => {

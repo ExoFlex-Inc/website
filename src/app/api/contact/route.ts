@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 /**
- * Contact and newsletter submissions, delivered as email.
+ * Contact submissions, delivered as email. (The footer newsletter that also
+ * posted here was removed 2026-08-24 at the owner's request — the subscribe
+ * branch went with it.)
  *
  * Replaces the HubSpot Forms integration, which had been failing silently on
  * every submission: the portal answered "Portal isn't allowed to post
- * submissions", so nothing a visitor sent ever arrived anywhere. The footer's
- * newsletter field posted to HubSpot straight from the browser and died the
- * same way, which is why both go through this one route now.
+ * submissions", so nothing a visitor sent ever arrived anywhere.
  *
- * Both kinds land in the same inbox. The sender's own address goes in Reply-To,
- * so answering the notification answers the person rather than the robot.
+ * The sender's own address goes in Reply-To, so answering the notification
+ * answers the person rather than the robot.
  *
  * Configuration (see .env.example): RESEND_API_KEY is required. CONTACT_FROM
  * must be an address on a domain verified in Resend — until exoflex.ca is
@@ -52,47 +52,38 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  const kind = body.kind === "subscribe" ? "subscribe" : "enquiry";
   const email = clean(body.email, 200);
 
   if (!EMAIL.test(email)) {
     return NextResponse.json({ ok: false, field: "email" }, { status: 400 });
   }
 
-  const fields =
-    kind === "subscribe"
-      ? [["Courriel", email]]
-      : [
-          ["Nature", INTEREST_LABELS[clean(body.interest, 40)] ?? clean(body.interest, 40)],
-          ["Nom", [clean(body.firstname, 100), clean(body.lastname, 100)].filter(Boolean).join(" ")],
-          ["Rôle", clean(body.role, 200)],
-          ["Établissement", clean(body.institution, 200)],
-          ["Courriel", email],
-        ];
+  const fields = [
+    ["Nature", INTEREST_LABELS[clean(body.interest, 40)] ?? clean(body.interest, 40)],
+    ["Nom", [clean(body.firstname, 100), clean(body.lastname, 100)].filter(Boolean).join(" ")],
+    ["Rôle", clean(body.role, 200)],
+    ["Établissement", clean(body.institution, 200)],
+    ["Courriel", email],
+  ];
 
   /* The message is the only field allowed to keep its line breaks. */
   const message =
-    kind === "enquiry" && typeof body.message === "string"
-      ? body.message.trim().slice(0, 5000)
-      : "";
+    typeof body.message === "string" ? body.message.trim().slice(0, 5000) : "";
 
-  if (kind === "enquiry" && !message) {
+  if (!message) {
     return NextResponse.json({ ok: false, field: "message" }, { status: 400 });
   }
 
   const rows = fields.filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`);
-  const text = message ? `${rows.join("\n")}\n\n${message}` : rows.join("\n");
+  const text = `${rows.join("\n")}\n\n${message}`;
 
-  const subject =
-    kind === "subscribe"
-      ? `Infolettre : ${email}`
-      : `${INTEREST_LABELS[clean(body.interest, 40)] ?? "Demande"} — ${
-          [clean(body.firstname, 100), clean(body.lastname, 100)].filter(Boolean).join(" ") || email
-        }`;
+  const subject = `${INTEREST_LABELS[clean(body.interest, 40)] ?? "Demande"} — ${
+    [clean(body.firstname, 100), clean(body.lastname, 100)].filter(Boolean).join(" ") || email
+  }`;
 
   const key = process.env.RESEND_API_KEY;
   if (!key) {
-    console.error("[contact] RESEND_API_KEY is not set — submission dropped:", { kind, email });
+    console.error("[contact] RESEND_API_KEY is not set — submission dropped:", { email });
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 

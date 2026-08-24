@@ -5,8 +5,15 @@ import Lenis from "lenis"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
+import { setLenis } from "@/lib/lenis"
 
 gsap.registerPlugin(ScrollTrigger)
+
+/* iOS Safari fires resize as its toolbar collapses and expands on every
+   scroll; each one made every trigger re-measure mid-flight against a
+   viewport that was about to change back. Skip those — real rotations and
+   window resizes still refresh. */
+ScrollTrigger.config({ ignoreMobileResize: true })
 
 /**
  * Lenis smooth scrolling, synced to GSAP's ticker so every ScrollTrigger on
@@ -24,6 +31,7 @@ export default function SmoothScroll() {
     if (reduced) return
 
     const lenis = new Lenis({ lerp: 0.12 })
+    setLenis(lenis)
     lenis.on("scroll", ScrollTrigger.update)
 
     const raf = (time: number) => lenis.raf(time * 1000)
@@ -32,6 +40,7 @@ export default function SmoothScroll() {
 
     return () => {
       gsap.ticker.remove(raf)
+      setLenis(null)
       lenis.destroy()
       gsap.ticker.lagSmoothing(500, 33)
     }
